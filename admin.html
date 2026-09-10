@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — PEC Pantura English Course</title>
+<meta name="theme-color" content="#0F3239">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --paper:#F6F1E5; --paper2:#EFE8D8; --ink:#0F3239; --ink2:#0A252B;
+    --accent:#E4572E; --gold:#E8B33C; --muted:#57696B; --hair:rgba(15,50,57,.18);
+    --serif:"Fraunces", Georgia, serif; --sans:"Space Grotesk", sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{color-scheme:light}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100dvh}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+  body>*{position:relative;z-index:1}
+  [hidden]{display:none !important}
+  ::selection{background:var(--gold);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+  svg.lucide{stroke-width:1.8}
+  .wrap{width:min(1080px, 100% - 40px);margin-inline:auto}
+  .micro{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+  .kicker{color:var(--accent)}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-family:var(--sans);
+    font-weight:600;font-size:14px;padding:12px 18px;border-radius:10px;border:1.5px solid var(--ink);
+    transition:transform .15s,box-shadow .15s,background .2s,color .2s;color:var(--ink);background:transparent;text-decoration:none;user-select:none}
+  .btn .lucide{width:17px;height:17px}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{background:var(--ink2)}
+  .btn-accent{background:var(--accent);color:var(--paper);box-shadow:4px 4px 0 var(--ink)}
+  .btn-accent:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+  .btn-accent:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+  .btn-ghost:hover{background:rgba(15,50,57,.08)}
+  .btn[disabled]{opacity:.45;pointer-events:none}
+
+  .icon-btn{width:40px;height:40px;flex:none;border:1.5px solid var(--ink);background:transparent;color:var(--ink);
+    border-radius:10px;cursor:pointer;display:grid;place-items:center;transition:background .2s,color .2s}
+  .icon-btn:hover{background:var(--ink);color:var(--paper)}
+  .icon-btn .lucide{width:18px;height:18px}
+  .icon-btn.busy{animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:700;border:1.5px solid var(--ink);border-radius:999px;padding:4px 11px}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.3}}
+  .chip.gold{border-color:#8a6a1a;color:#8a6a1a}
+  .chip.solid{background:var(--ink);color:var(--paper)}
+  .chip.mut{background:rgba(15,50,57,.08);border-color:transparent;color:var(--muted)}
+
+  /* ---- header ---- */
+  .site-head{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1.5px solid var(--ink)}
+  .site-head .wrap{display:flex;align-items:center;gap:14px;height:64px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mono-box{min-width:52px;height:40px;padding:0 9px;background:var(--ink);color:var(--paper);border-radius:10px;
+    display:grid;place-items:center;font-family:var(--serif);font-style:italic;font-weight:700;font-size:16px}
+  .mono-box b{color:var(--gold)}
+  .brand strong{display:block;font-family:var(--serif);font-size:17px;line-height:1.1}
+  .brand span{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .head-actions{margin-left:auto;display:flex;gap:9px}
+
+  /* ---- gate ---- */
+  .gate{min-height:calc(100dvh - 65px);display:grid;place-items:center;padding:32px 0}
+  .gate-card{width:min(400px,100%);border:1.5px solid var(--ink);border-radius:16px;background:var(--paper);
+    box-shadow:7px 7px 0 var(--ink);padding:32px 26px;text-align:center}
+  .gate-card .lucide{width:34px;height:34px;color:var(--accent)}
+  .gate-card h1{font-family:var(--serif);font-size:27px;font-weight:600;margin:14px 0 6px}
+  .gate-card p{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:22px}
+  .gate-card input{width:100%;font:inherit;font-size:16px;letter-spacing:.3em;text-align:center;font-weight:700;
+    padding:13px;border:1.5px solid var(--ink);border-radius:11px;background:var(--paper);outline:none}
+  .gate-card input:focus{box-shadow:3px 3px 0 var(--ink)}
+  .gate-err{color:var(--accent);font-size:12.5px;font-weight:600;margin-top:10px;display:none}
+  .gate-err.show{display:block}
+  .gate-card .btn{width:100%;justify-content:center;margin-top:16px}
+  .gate-note{font-size:11px;color:var(--muted);margin-top:18px;line-height:1.6}
+
+  /* ---- toolbar ---- */
+  .sec{padding:34px 0}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden}
+  .seg button{font:inherit;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    border:none;background:transparent;color:var(--ink);padding:10px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .seg button .lucide{width:14px;height:14px}
+  .seg button.active{background:var(--ink);color:var(--paper)}
+  .search{display:flex;align-items:center;gap:9px;border:1.5px solid var(--ink);border-radius:10px;
+    padding:10px 13px;background:var(--paper);flex:1 1 200px;min-width:180px}
+  .search .lucide{width:16px;height:16px;color:var(--muted);flex:none}
+  .search input{border:none;outline:none;background:transparent;font:inherit;font-size:14px;width:100%;color:var(--ink)}
+  select{font:inherit;font-size:13.5px;font-weight:600;padding:10px 12px;border:1.5px solid var(--ink);
+    border-radius:10px;background:var(--paper);color:var(--ink);outline:none;cursor:pointer}
+  .count-line{font-size:12px;color:var(--muted);margin:4px 2px 10px}
+
+  /* ---- stats ledger ---- */
+  .stats{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin-bottom:30px}
+  .stats .wrap-in{display:flex;flex-wrap:wrap}
+  .stat{flex:1 1 150px;padding:18px 18px 16px;border-left:1px solid var(--hair);display:flex;flex-direction:column;gap:3px}
+  .stat:first-child{border-left:none;padding-left:2px}
+  .stat b{font-family:var(--serif);font-weight:600;font-size:32px;line-height:1}
+  .stat span{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .stat.acc b{color:var(--accent)}
+
+  /* ---- baris pendaftar ---- */
+  .rrow{display:grid;grid-template-columns:44px 1fr auto;grid-template-areas:"idx main side";
+    gap:6px 14px;padding:18px 4px;border-top:1px solid var(--hair);align-items:start}
+  #list .rrow:last-child{border-bottom:1px solid var(--hair)}
+  .r-idx{grid-area:idx;font-family:var(--serif);font-style:italic;font-size:15px;opacity:.5;padding-top:3px}
+  .r-main{grid-area:main;min-width:0}
+  .r-name{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.15}
+  .r-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+  .tag{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+    border:1px solid var(--hair);border-radius:4px;padding:2px 7px;color:var(--muted)}
+  .r-reason{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55;font-style:italic}
+  .r-sub{font-size:11.5px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .r-sub .lucide{width:13px;height:13px}
+  .r-side{grid-area:side;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+  .r-date{font-size:11px;letter-spacing:.08em;color:var(--muted);font-weight:600;text-transform:uppercase}
+  .st-btn{cursor:pointer;font:inherit}
+  .r-actions{display:flex;gap:8px}
+  .mini-btn{width:36px;height:36px;border:1.5px solid var(--ink);border-radius:9px;background:transparent;color:var(--ink);
+    display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s;text-decoration:none}
+  .mini-btn .lucide{width:15px;height:15px}
+  .mini-btn:hover{background:var(--ink);color:var(--paper)}
+  .mini-btn.wa{background:#0F3239;color:var(--paper)}
+  .mini-btn.wa:hover{background:var(--ink2)}
+  .mini-btn.del.armed{background:var(--accent);border-color:var(--accent);color:var(--paper);width:auto;padding:0 10px;font-size:11.5px;font-weight:700}
+  @media(max-width:560px){
+    .rrow{grid-template-columns:1fr;grid-template-areas:"side" "main"}
+    .r-side{flex-direction:row;align-items:center;justify-content:space-between;width:100%}
+    .r-idx{display:none}
+  }
+  .empty{padding:56px 20px;text-align:center;border:1.5px dashed var(--hair);border-radius:16px}
+  .empty .lucide{width:40px;height:40px;opacity:.4}
+  .empty h3{font-family:var(--serif);font-size:22px;margin:14px 0 8px}
+  .empty p{color:var(--muted);font-size:14px;line-height:1.6;max-width:44ch;margin:0 auto 20px}
+
+  /* ---- distribusi program ---- */
+  .dist{margin-top:34px}
+  .dist h3{font-family:var(--serif);font-size:21px;font-weight:600;margin-bottom:14px}
+  .drow{display:grid;grid-template-columns:minmax(120px,200px) 1fr 34px;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--hair)}
+  .drow span{font-size:12.5px;font-weight:600}
+  .dbar{height:10px;border:1px solid var(--ink);border-radius:99px;overflow:hidden;background:var(--paper)}
+  .dbar i{display:block;height:100%;background:var(--accent);border-right:1px solid var(--ink);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+  .drow b{font-variant-numeric:tabular-nums;font-size:13px;text-align:right}
+
+  /* ---- drawer setup ---- */
+  .scrim{position:fixed;inset:0;background:rgba(10,37,43,.55);z-index:60;opacity:0;pointer-events:none;transition:opacity .3s}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;width:min(480px,100%);z-index:70;background:var(--paper);
+    border-left:1.5px solid var(--ink);transform:translateX(102%);transition:transform .4s cubic-bezier(.25,.9,.3,1);
+    overflow-y:auto;padding:26px clamp(18px,4vw,30px) 30px}
+  .drawer.open{transform:none}
+  .drawer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .drawer h2{font-family:var(--serif);font-size:26px;font-weight:600;margin:8px 0 20px}
+  .dsec{margin-bottom:28px}
+  .dsec h4{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
+  .field{display:block;margin-bottom:14px}
+  .field>span{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:7px}
+  .field input,.field textarea{width:100%;font:inherit;font-size:14.5px;padding:12px 14px;color:var(--ink);
+    border:1.5px solid var(--ink);border-radius:10px;background:var(--paper);outline:none}
+  .field input:focus{box-shadow:3px 3px 0 var(--ink)}
+  .copybox{position:relative}
+  .copybox pre{background:var(--paper2);border:1.5px solid var(--ink);border-radius:10px;padding:14px;
+    font-size:11.5px;line-height:1.55;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre}
+  .copybox button{position:absolute;top:8px;right:8px}
+  .hint{font-size:12px;color:var(--muted);line-height:1.65;margin-top:8px}
+  .steps{margin:8px 0 0 18px;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.6}
+  .steps b{color:var(--accent)}
+
+  /* ---- toast ---- */
+  .toast-wrap{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:90;display:flex;flex-direction:column;gap:9px;align-items:center;width:max-content;max-width:calc(100vw - 32px)}
+  .toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border-radius:11px;
+    padding:13px 18px;font-size:13.5px;font-weight:600;box-shadow:4px 4px 0 rgba(15,50,57,.3);animation:tin .3s ease;max-width:100%}
+  .toast .lucide{width:17px;height:17px;color:var(--gold);flex:none}
+  .toast.warn .lucide{color:var(--accent)}
+  .toast.out{animation:tout .3s ease forwards}
+  @keyframes tin{from{opacity:0;transform:translateY(14px)}}
+  @keyframes tout{to{opacity:0;transform:translateY(10px)}}
+
+  footer{border-top:1.5px solid var(--ink);padding:18px 0;font-size:12px;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  footer a{color:var(--muted)}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-head">
+  <div class="wrap">
+    <div class="brand">
+      <span class="mono-box">PEC<b>.</b></span>
+      <div><strong>Panel Admin</strong><span>Pantura English Course</span></div>
+    </div>
+    <div class="head-actions" id="headActions" hidden>
+      <button class="icon-btn" id="btnRefresh" title="Muat ulang data"><i data-lucide="refresh-cw"></i></button>
+      <button class="icon-btn" id="btnExport" title="Ekspor CSV"><i data-lucide="download"></i></button>
+      <button class="icon-btn" id="btnSetup" title="Pengaturan"><i data-lucide="settings-2"></i></button>
+      <button class="icon-btn" id="btnLogout" title="Keluar"><i data-lucide="log-out"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- GERBANG SANDI -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <i data-lucide="lock-keyhole"></i>
+    <h1>Panel Admin PEC</h1>
+    <p>Halaman ini bukan untuk publik. Masukkan sandi admin untuk melihat daftar pendaftar.</p>
+    <input id="passInput" type="password" inputmode="text" placeholder="••••••••" autocomplete="current-password">
+    <em class="gate-err" id="gateErr">Sandi salah — coba lagi.</em>
+    <button class="btn btn-primary" id="btnUnlock"><i data-lucide="key-round"></i> Buka Panel</button>
+    <p class="gate-note">Sandi bawaan: <b>pec2025</b> — segera ganti di menu Pengaturan setelah masuk. Catatan jujur: gerbang ini pengaman tiruan sisi klien (layar penjaga), bukan keamanan server.</p>
+  </div>
+</div>
+
+<!-- PANEL -->
+<main id="panel" hidden>
+  <section class="sec">
+    <div class="wrap">
+
+      <div class="toolbar">
+        <div class="seg" role="tablist">
+          <button id="mOnline"><i data-lucide="cloud"></i>Online</button>
+          <button id="mLocal"><i data-lucide="smartphone"></i>Lokal</button>
+        </div>
+        <label class="search"><i data-lucide="search"></i>
+          <input id="q" type="search" placeholder="Cari nama, no. WA, program…">
+        </label>
+        <select id="fProg" aria-label="Filter program"></select>
+      </div>
+      <p class="count-line" id="countLine">—</p>
+
+      <div class="stats" style="margin-inline:calc(50% - 50vw)">
+        <div class="wrap-in wrap">
+          <div class="stat"><b id="sTotal">0</b><span>Total pendaftar</span></div>
+          <div class="stat acc"><b id="sToday">0</b><span>Hari ini</span></div>
+          <div class="stat"><b id="sWait">0</b><span>Waitlist</span></div>
+          <div class="stat"><b id="sBaru">0</b><span>Belum dihubungi</span></div>
+        </div>
+      </div>
+
+      <div id="list"></div>
+      <div class="empty" id="empty" hidden>
+        <i data-lucide="inbox"></i>
+        <h3 id="emptyTitle">Belum ada data</h3>
+        <p id="emptyMsg"></p>
+        <button class="btn btn-accent" id="btnEmptySetup" hidden><i data-lucide="plug-zap"></i> Sambungkan Google Sheet</button>
+      </div>
+
+      <div class="dist" id="dist" hidden>
+        <h3>Distribusi program</h3>
+        <div id="distRows"></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer id="foot" hidden>
+  <div class="wrap">
+    <span>PEC — Pantura English Course · Panel Admin</span>
+    <a href="./">← Kembali ke aplikasi</a>
+  </div>
+</footer>
+
+<!-- DRAWER -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Pengaturan">
+  <div class="drawer-top">
+    <p class="micro kicker">Pengaturan</p>
+    <button class="icon-btn" id="btnCloseDrawer" aria-label="Tutup"><i data-lucide="x"></i></button>
+  </div>
+  <h2>Sambungkan &amp; amankan</h2>
+
+  <div class="dsec">
+    <h4>1 · Koneksi Google Sheet</h4>
+    <label class="field"><span>URL Web App (Apps Script)</span>
+      <input id="cfgEndpoint" type="url" placeholder="https://script.google.com/macros/s/AKfy…/exec">
+    </label>
+    <label class="field"><span>Token rahasia</span>
+      <input id="cfgToken" type="text" placeholder="pec-secret-2025">
+    </label>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="btnSaveCfg"><i data-lucide="save"></i> Simpan</button>
+      <button class="btn btn-ghost" id="btnTest"><i data-lucide="plug-zap"></i> Tes koneksi</button>
+    </div>
+    <p class="hint">Setelah simpan, panel otomatis pindah ke mode <b>Online</b> dan menarik data dari Sheet.</p>
+  </div>
+
+  <div class="dsec">
+    <h4>2 · Kode backend (Code.gs)</h4>
+    <p class="hint" style="margin:0 0 10px">Tempel kode ini ke project Apps Script saat setup (lihat panduan di bawah). Samakan <b>TOKEN</b>-nya dengan kolom di atas.</p>
+    <div class="copybox">
+      <pre id="gsCode">const SHEET = 'Pendaftar';
+const TOKEN = 'pec-secret-2025'; // samakan dgn admin.html
+
+const ss = () => SpreadsheetApp.getActiveSpreadsheet() || (() => {
+  const f = DriveApp.getFilesByName('PEC Pendaftar DB');
+  return f.hasNext() ? SpreadsheetApp.open(f.next()) : SpreadsheetApp.create('PEC Pendaftar DB');
+})();
+
+function out(o){ return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+function doGet(e){
+  if (e.parameter.token !== TOKEN) return out({ok:false, error:'token salah'});
+  const sh = ss().getSheetByName(SHEET);
+  const rows = sh.getDataRange().getValues(); rows.shift();
+  return out({ok:true, data: rows.map(r => ({
+    id:r[0], tanggal:r[1], nama:r[2], wa:r[3], sekolah:r[4], alasan:r[5], program:r[6], tipe:r[7]
+  }))});
+}
+
+function doPost(e){
+  const d = JSON.parse(e.postData.contents);
+  if (d.token !== TOKEN) return out({ok:false, error:'token salah'});
+  const sh = ss().getSheetByName(SHEET) || ss().insertSheet(SHEET)
+    .appendRow(['id','tanggal','nama','wa','sekolah','alasan','program','tipe']);
+  sh.appendRow([d.id, d.date, d.name, d.phone, d.school, d.reason, d.program, d.type]);
+  return out({ok:true});
+}</pre>
+      <button class="icon-btn" id="btnCopyGs" title="Salin kode"><i data-lucide="copy"></i></button>
+    </div>
+  </div>
+
+  <div class="dsec">
+    <h4>3 · Ganti sandi admin</h4>
+    <label class="field"><span>Sandi sekarang</span><input id="pOld" type="password" autocomplete="current-password"></label>
+    <label class="field"><span>Sandi baru (min. 6 karakter)</span><input id="pNew" type="password" autocomplete="new-password"></label>
+    <button class="btn btn-primary" id="btnChangePass"><i data-lucide="key-round"></i> Ganti sandi</button>
+  </div>
+
+  <div class="dsec">
+    <h4>4 · Panduan setup (dari HP)</h4>
+    <ol class="steps">
+      <li>Buka <b>script.google.com</b> di Chrome (login akun Google). Kalau tampilan sesak, aktifkan <b>“Situs desktop”</b> di menu ⋮.</li>
+      <li><b>New project</b> → hapus isi editor → tempel kode <b>Code.gs</b> di atas → ganti nilai <b>TOKEN</b> → simpan (ikon disket).</li>
+      <li>Klik <b>Deploy → New deployment</b> → ikon gerigi → pilih <b>Web app</b>. Isi: <b>Execute as: Me</b>, <b>Who has access: Anyone</b>.</li>
+      <li>Klik <b>Deploy</b> → <b>Authorize access</b> → pilih akun → <b>Allow</b> (Google akan memperingatkan “unverified app” — klik <i>Advanced → Go to project</i>; ini aman karena skrip milikmu sendiri).</li>
+      <li>Salin <b>Web app URL</b> (berakhiran <b>/exec</b>) → tempel ke kolom nomor 1 di atas → Simpan → Tes koneksi.</li>
+      <li>Selesai! Sheet bernama <b>“PEC Pendaftar DB”</b> dibuat otomatis di Google Drive-mu setiap ada pendaftar baru.</li>
+    </ol>
+  </div>
+
+  <div class="dsec">
+    <h4>Catatan kejujuran</h4>
+    <p class="hint">Sandi di halaman ini hanya layar penjaga sisi klien — siapa pun yang membaca kode sumber bisa melewatinya. Yang benar-benar melindungi data adalah: URL Apps Script yang tidak disebar, token rahasia, dan fakta bahwa halaman ini <b>noindex</b>. Untuk kebutuhan klub, kombinasi ini umumnya cukup.</p>
+  </div>
+</aside>
+
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+  <script>
+/* ============ util ============ */
+const $ = s => document.querySelector(s);
+const icons = () => window.lucide && lucide.createIcons();
+const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const store = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
+};
+function toast(msg, warn){
+  const el = document.createElement('div');
+  el.className = 'toast' + (warn ? ' warn' : '');
+  el.innerHTML = `<i data-lucide="${warn?'triangle-alert':'circle-check'}"></i><span>${msg}</span>`;
+  $('#toastWrap').appendChild(el); icons();
+  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(),300) }, 3200);
+}
+async function sha256(s){
+  if (crypto.subtle){
+    const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+  let h1=0xdeadbeef,h2=0x41c6ce57;
+  for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+  h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (h2>>>0).toString(16)+(h1>>>0).toString(16);
+}
+
+    /* ============ konfigurasi ============ */
+let CFG = store.get('pec_admin_cfg', { endpoint:'', token:'pec-secret-2025' });
+let mode = CFG.endpoint ? 'online' : 'lokal';
+let statusMap = store.get('pec_admin_status', {});
+let hiddenIds = store.get('pec_admin_hidden', []);
+let rows = [];
+let filters = { q:'', prog:'all' };
+
+if (!localStorage.getItem('pec_admin_hash')){
+  sha256('pec2025').then(h => store.set('pec_admin_hash', h));
+    }
+
+    /* ============ gerbang sandi ============ */
+async function unlock(){
+  const v = $('#passInput').value;
+  const okHash = store.get('pec_admin_hash', '');
+  if (!okHash){ $('#gateErr').classList.add('show'); return; }
+  if (await sha256(v) === okHash){
+    sessionStorage.setItem('pec_admin_auth','1');
+    enterPanel();
+  } else {
+    $('#gateErr').classList.add('show');
+    $('#passInput').value = '';
+    $('#passInput').focus();
+  }
+}
+ $('#btnUnlock').addEventListener('click', unlock);
+ $('#passInput').addEventListener('keydown', e => { if (e.key==='Enter') unlock(); });
+ $('#passInput').addEventListener('input', () => $('#gateErr').classList.remove('show'));
+
+function enterPanel(){
+  $('#gate').hidden = true;
+  $('#panel').hidden = false;
+  $('#foot').hidden = false;
+  $('#headActions').hidden = false;
+  $('#cfgEndpoint').value = CFG.endpoint;
+  $('#cfgToken').value = CFG.token;
+  refresh();
+}
+ $('#btnLogout').addEventListener('click', () => {
+  sessionStorage.removeItem('pec_admin_auth');
+  location.reload();
+});
+if (sessionStorage.getItem('pec_admin_auth') === '1') enterPanel();
+
+    /* ============ drawer ============ */
+function openDrawer(){ $('#drawer').classList.add('open'); $('#scrim').classList.add('show'); icons(); }
+function closeDrawer(){ $('#drawer').classList.remove('open'); $('#scrim').classList.remove('show'); }
+ $('#btnSetup').addEventListener('click', openDrawer);
+ $('#btnEmptySetup').addEventListener('click', openDrawer);
+ $('#btnCloseDrawer').addEventListener('click', closeDrawer);
+ $('#scrim').addEventListener('click', closeDrawer);
+
+ $('#btnSaveCfg').addEventListener('click', () => {
+  CFG.endpoint = $('#cfgEndpoint').value.trim().replace(/\/?$/,'');
+  CFG.token = $('#cfgToken').value.trim() || 'pec-secret-2025';
+  store.set('pec_admin_cfg', CFG);
+  mode = CFG.endpoint ? 'online' : 'lokal';
+  setModeUI(); refresh();
+  toast(CFG.endpoint ? 'Tersimpan — mode Online aktif' : 'Tersimpan — endpoint kosong, pakai mode Lokal');
+});
+ $('#btnTest').addEventListener('click', async () => {
+  const ep = $('#cfgEndpoint').value.trim().replace(/\/?$/,'');
+  const tk = $('#cfgToken').value.trim();
+  if (!ep) return toast('Isi URL Web App dulu', true);
+  try{
+    const r = await fetch(`${ep}?token=${encodeURIComponent(tk)}`);
+    const j = await r.json();
+    toast(j.ok ? `Koneksi OK — ${j.data.length} pendaftar di Sheet` : 'Server menolak: ' + (j.error||'?'), !j.ok);
+  }catch(e){ toast('Gagal menghubungi server — cek URL & deployment', true); }
+});
+ $('#btnCopyGs').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText($('#gsCode').textContent); toast('Kode Code.gs disalin'); }
+  catch(e){ toast('Tidak bisa menyalin — salin manual', true); }
+});
+    $('#btnChangePass').addEventListener('click', async () => {
+  const hash = store.get('pec_admin_hash','');
+  if (await sha256($('#pOld').value) !== hash) return toast('Sandi sekarang salah', true);
+  if ($('#pNew').value.length < 6) return toast('Sandi baru minimal 6 karakter', true);
+  store.set('pec_admin_hash', await sha256($('#pNew').value));
+  $('#pOld').value = $('#pNew').value = '';
+  toast('Sandi admin diganti');
+});
+
+    /* ============ mode & muat data ============ */
+function setModeUI(){
+  $('#mOnline').classList.toggle('active', mode==='online');
+  $('#mLocal').classList.toggle('active', mode==='lokal');
+}
+ $('#mOnline').addEventListener('click', () => {
+  if (!CFG.endpoint){ openDrawer(); return toast('Sambungkan Google Sheet dulu', true); }
+  mode='online'; setModeUI(); refresh();
+});
+ $('#mLocal').addEventListener('click', () => { mode='lokal'; setModeUI(); refresh(); });
+
+const NORM = r => ({
+  id: r.id, name: r.nama ?? r.name ?? '', phone: r.wa ?? r.phone ?? '',
+  school: r.sekolah ?? r.school ?? '', reason: r.alasan ?? r.reason ?? '',
+  program: r.program ?? '', type: r.tipe ?? r.type ?? 'reg',
+  date: typeof r.tanggal === 'string' ? Date.parse(r.tanggal) || 0 : (r.date ?? 0),
+});
+
+async function refresh(){
+  const btn = $('#btnRefresh'); btn.classList.add('busy');
+  if (mode === 'online'){
+    try{
+      const r = await fetch(`${CFG.endpoint}?token=${encodeURIComponent(CFG.token)}`);
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error);
+      rows = j.data.map(NORM);
+      toast(`Data dimuat: ${rows.length} pendaftar dari Sheet`);
+    }catch(e){
+      rows = []; toast('Gagal memuat dari Sheet — periksa Pengaturan', true);
+    }
+  } else {
+    rows = store.get('pec_regs_v1', []).map(NORM);
+  }
+  btn.classList.remove('busy');
+  render();
+}
+ $('#btnRefresh').addEventListener('click', refresh);
+
+/* ============ filter ============ */
+ $('#q').addEventListener('input', e => { filters.q = e.target.value.toLowerCase(); render(); });
+ $('#fProg').addEventListener('change', e => { filters.prog = e.target.value; render(); });
+    
