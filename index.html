@@ -929,6 +929,8 @@ let currentProgram = null;
 let formStep = 1;
 let deferredPrompt = null;
 
+const ENDPOINT = ''; // ← tempel URL Apps Script di sini (langkah setup)
+const TOKEN    = 'pec-secret-2025';
 const seatsLeft = p => p.seats - p.taken - regs.filter(r => r.programId === p.id && r.type === 'reg').length;
 const priceLabel = p => p.price === 0 ? 'Gratis' : `Rp ${p.price}rb/bln`;
 const byId = id => PROGRAMS.find(p => p.id === id);
@@ -1171,6 +1173,17 @@ function validateStep1(){
  $('#fPhone').addEventListener('input', e => $('#fldPhone').classList.remove('invalid'));
  $('#fName').addEventListener('input',  e => $('#fldName').classList.remove('invalid'));
 
+function sendToServer(reg){
+  if (!ENDPOINT) return;
+  try{
+    fetch(ENDPOINT, {method:'POST', body: JSON.stringify({
+      token: TOKEN, id: reg.id, date: new Date(reg.date).toISOString(),
+      name: reg.name, phone: reg.phone, school: reg.school,
+      reason: reg.reason, program: (byId(reg.programId)||{}).name || reg.programId, type: reg.type
+    })}).catch(()=>{});
+  }catch(e){}
+}
+
 function genRegId(){
   const n = new Date();
   const d = String(n.getFullYear()).slice(2) + String(n.getMonth()+1).padStart(2,'0') + String(n.getDate()).padStart(2,'0');
@@ -1193,6 +1206,7 @@ function submitForm(){
   };
   regs.unshift(reg);
   store.set('pec_regs_v1', regs);
+  sendToServer(reg);
   renderList(); renderRegs();
 
   // isi kartu member
