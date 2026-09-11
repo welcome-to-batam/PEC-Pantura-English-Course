@@ -511,4 +511,151 @@ async function refresh(){
 /* ============ filter ============ */
  $('#q').addEventListener('input', e => { filters.q = e.target.value.toLowerCase(); render(); });
  $('#fProg').addEventListener('change', e => { filters.prog = e.target.value; render(); });
-    
+
+ /* ============ render ============ */
+function waLink(r){
+  let p = (r.phone||'').replace(/\D/g,'');
+  if (p.startsWith('0')) p = '62'+p.slice(1);
+  if (!/^62\d{8,13}$/.test(p)) return null;
+  const msg = `Halo ${r.name}, saya admin PEC — Pantura English Course. Pendaftaranmu untuk program ${r.program} (no. ${r.id}) sudah kami terima. Boleh dijadwalkan verifikasi? Terima kasih!`;
+  return `https://wa.me/${p}?text=${encodeURIComponent(msg)}`;
+}
+const STATUS = [
+  {id:'baru', label:'Baru', cls:''},
+  {id:'hub',  label:'Dihubungi', cls:'gold'},
+  {id:'ok',   label:'Terkonfirmasi', cls:'solid'},
+];
+const stOf = id => statusMap[id] || 'baru';
+
+function render(){
+  const list = rows.filter(r => !hiddenIds.includes(r.id)).filter(r => {
+    if (filters.prog !== 'all' && r.program !== filters.prog) return false;
+    if (filters.q && ![r.name,r.phone,r.program,r.school,r.id].join(' ').toLowerCase().includes(filters.q)) return false;
+    return true;
+  }).sort((a,b) => b.date - a.date);
+
+    // filter dropdown program
+  const progs = [...new Set(rows.map(r => r.program).filter(Boolean))].sort();
+  const sel = $('#fProg'), cur = filters.prog;
+  sel.innerHTML = `<option value="all">Semua program (${rows.length})</option>` +
+    progs.map(p => `<option ${p===cur?'selected':''} value="${p}">${p} (${rows.filter(r=>r.program===p).length})</option>`).join('');
+
+  // statistik
+  const t0 = new Date(); t0.setHours(0,0,0,0);
+  $('#sTotal').textContent = rows.length;
+  $('#sToday').textContent = rows.filter(r => r.date >= t0.getTime()).length;
+  $('#sWait').textContent  = rows.filter(r => r.type === 'waitlist').length;
+  $('#sBaru').textContent  = rows.filter(r => stOf(r.id) === 'baru').length;
+  $('#countLine').textContent =
+    `Mode ${mode==='online'?'Online — Google Sheet':'Lokal — perangkat ini'} · ${list.length} baris ditampilkan`;
+
+  // daftar
+  $('#empty').hidden = list.length > 0;
+  if (!list.length){
+    if (!rows.length){
+      $('#emptyTitle').textContent = mode==='online' ? 'Belum ada pendaftar di Sheet' : 'Belum ada pendaftaran di perangkat ini';
+      $('#emptyMsg').textContent = mode==='online'
+        ? 'Sheet terhubung tapi kosong. Pastikan index.html sudah di-patch agar pendaftaran terkirim ke server, lalu coba daftar sekali untuk tes.'
+        : 'Buka aplikasi utama di perangkat ini dan daftar satu program — pendaftarannya akan muncul di sini.';
+      $('#btnEmptySetup').hidden = mode!=='online';
+    } else {
+      $('#emptyTitle').textContent = 'Tidak ada yang cocok';
+      $('#emptyMsg').textContent = 'Filter atau kata kunci terlalu sempit.';
+      $('#btnEmptySetup').hidden = true;
+    }
+        }
+  $('#list').innerHTML = list.map((r,i) => {
+    const st = STATUS.find(s => s.id === stOf(r.id));
+    const wa = waLink(r);
+    const d = r.date ? new Date(r.date) : null;
+    const tgl = d ? `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()} · ${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}` : '—';
+    return `
+    <div class="rrow">
+      <div class="r-idx">${String(i+1).padStart(2,'0')}</div>
+      <div class="r-main">
+        <div class="r-name">${esc(r.name) || '(tanpa nama)'}</div>
+        <div class="r-tags">
+          <span class="tag">${esc(r.program) || '—'}</span>
+          <span class="tag">${r.type==='waitlist'?'Waitlist':'Reguler'}</span>
+          ${esc(r.school) ? `<span class="tag">${esc(r.school)}</span>` : ''}
+        </div>
+        ${r.reason ? `<p class="r-reason">“${esc(r.reason)}”</p>` : ''}
+        <div class="r-sub"><i data-lucide="hash"></i>${esc(r.id)} <i data-lucide="phone" style="margin-left:8px"></i>${esc(r.phone)}</div>
+      </div>
+      <div class="r-side">
+        <span class="r-date">${tgl}</span>
+        <button class="chip st-btn ${st.cls}" data-st="${r.id}" title="Ketuk untuk ubah status"><span class="dot"></span>${st.label}</button>
+        <div class="r-actions">
+          ${wa ? `<a class="mini-btn wa" href="${wa}" target="_blank" rel="noopener" title="Chat WhatsApp"><i data-lucide="message-circle"></i></a>` : ''}
+          <button class="mini-btn del" data-del="${r.id}" title="Sembunyikan"><i data-lucide="trash-2"></i></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+    // distribusi
+  const dist = progs.map(p => ({p, n: rows.filter(r=>r.program===p).length})).sort((a,b)=>b.n-a.n);
+  const max = Math.max(1, ...dist.map(d=>d.n));
+  $('#dist').hidden = !dist.length;
+  $('#distRows').innerHTML = dist.map(d => `
+    <div class="drow"><span>${esc(d.p)}</span>
+      <div class="dbar"><i style="width:${Math.round(d.n/max*100)}%"></i></div><b>${d.n}</b></div>`).join('');
+  icons();
+}
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* aksi baris: ubah status / sembunyikan */
+ $('#list').addEventListener('click', e => {
+  const stb = e.target.closest('[data-st]');
+  if (stb){
+    const id = stb.dataset.st;
+    const next = STATUS[(STATUS.findIndex(s=>s.id===stOf(id)) + 1) % STATUS.length];
+    statusMap[id] = next.id; store.set('pec_admin_status', statusMap);
+    render(); return;
+  }
+  const del = e.target.closest('[data-del]');
+  if (del){
+    if (!del.classList.contains('armed')){
+      del.classList.add('armed'); del.innerHTML = 'Yakin?';
+      setTimeout(()=>{ if(del.isConnected){ del.classList.remove('armed'); del.innerHTML='<i data-lucide="trash-2"></i>'; icons(); } }, 2600);
+      return;
+    }
+    const id = del.dataset.del;
+    hiddenIds.push(id); store.set('pec_admin_hidden', hiddenIds);
+    if (mode === 'lokal'){
+      const local = store.get('pec_regs_v1', []).filter(r => r.id !== id);
+      store.set('pec_regs_v1', local);
+    }
+    toast(mode==='lokal' ? 'Pendaftaran dihapus' : 'Baris disembunyikan (data asli tetap di Sheet)', true);
+    refresh();
+  }
+});
+
+    /* ============ ekspor CSV ============ */
+ $('#btnExport').addEventListener('click', () => {
+  const list = rows.filter(r => !hiddenIds.includes(r.id)).sort((a,b)=>b.date-a.date);
+  if (!list.length) return toast('Tidak ada data untuk diekspor', true);
+  const cell = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const head = ['No','ID','Tanggal','Nama','WhatsApp','Sekolah','Program','Tipe','Status'];
+  const lines = list.map((r,i) => [
+    i+1, r.id, r.date ? new Date(r.date).toLocaleString('id-ID') : '', r.name, r.phone, r.school, r.program,
+    r.type==='waitlist'?'Waitlist':'Reguler',
+    STATUS.find(s=>s.id===stOf(r.id)).label
+  ].map(cell).join(';'));
+  const csv = '\uFEFF' + head.join(';') + '\n' + lines.join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = `PEC-Pendaftar-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  toast(`${list.length} baris diekspor ke CSV`);
+});
+
+/* escape */
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeDrawer(); });
+
+setModeUI();
+icons();
+</script>
+</body>
+</html>
