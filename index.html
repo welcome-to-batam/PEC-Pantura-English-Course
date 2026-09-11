@@ -278,6 +278,13 @@
   }
   .reg-cancel:hover{background:rgba(246,241,229,.12)}
   .reg-cancel.armed{background:var(--accent); border-color:var(--accent); color:var(--paper)}
+  .reg-card{
+  width:38px;height:38px; border:1px solid rgba(246,241,229,.35); background:transparent; color:var(--paper);
+  border-radius:9px; cursor:pointer; display:grid; place-items:center; font:inherit; padding:0;
+  transition:background .2s,color .2s,border-color .2s;
+}
+.reg-card:hover{background:rgba(246,241,229,.12)}
+.reg-card .lucide{width:16px;height:16px}
   .reg-empty{
     border:1.5px dashed rgba(246,241,229,.3); border-radius:16px; padding:60px 24px; text-align:center;
   }
@@ -1119,6 +1126,7 @@ function openForm(id){
   $('#agreeErr').style.display = 'none';
   $('#fSuccess').hidden = true;
   $('#cardZone').hidden = true;
+  $('#fSuccess .success').style.display = '';
   showStep(1);
   $('#formOverlay').classList.add('show');
   document.documentElement.style.overflow = 'hidden';
@@ -1242,6 +1250,33 @@ function submitForm(){
   setTimeout(() => $('#pendaftaran').scrollIntoView({behavior:'smooth'}), 250);
 });
 
+  /* buka kartu member dari daftar pendaftaran */
+function openCard(regId){
+  const r = regs.find(x => x.id === regId);
+  if (!r) return;
+  const p = byId(r.programId);
+  const d = new Date(r.date);
+  $('#formKicker').textContent = 'Kartu Member';
+  $('#formTitle').textContent  = p ? p.name : 'PEC';
+  $('#formStepInd').textContent = '✓';
+  $('#fs1').hidden = true;
+  $('#fs2').hidden = true;
+  $('#fSuccess').hidden = false;
+  $('#fSuccess .success').style.display = 'none';
+  $('#regIdVal').textContent = r.id;
+  $('#mcName').textContent  = r.name;
+  $('#mcProg').textContent  = p ? p.name : '—';
+  $('#mcSince').textContent = `Member since ${MON[d.getMonth()]} ${d.getFullYear()}`;
+  $('#bcId').textContent = r.id;
+  drawBarcode(r.id);
+  $('#memberCard').classList.remove('flipped');
+  $('#cardZone').hidden = false;
+  $('#formFoot').innerHTML = '';
+  $('#formOverlay').classList.add('show');
+  document.documentElement.style.overflow = 'hidden';
+  icons();
+}
+
 /* barcode deterministik dari nomor pendaftaran */
 function drawBarcode(seed){
   const cv = $('#bcCanvas'), ctx = cv.getContext('2d');
@@ -1284,6 +1319,7 @@ function renderRegs(){
       </div>
       <div class="reg-side">
         <span class="chip ${r.type==='waitlist'?'wl':''}">${r.type==='waitlist' ? 'Waitlist' : 'Menunggu verifikasi'}</span>
+        <button class="reg-card" data-card="${r.id}" aria-label="Lihat kartu member" title="Lihat kartu member"><i data-lucide="badge-check"></i></button>
         <button class="reg-cancel" data-cancel="${r.id}" aria-label="Batalkan pendaftaran"><i data-lucide="trash-2"></i></button>
       </div>
     </div>`;
@@ -1291,6 +1327,8 @@ function renderRegs(){
   icons();
 }
 
+ const card = e.target.closest('[data-card]');
+if (card){ openCard(card.dataset.card); return; }
  $('#regList').addEventListener('click', e => {
   const btn = e.target.closest('[data-cancel]');
   if (!btn) return;
