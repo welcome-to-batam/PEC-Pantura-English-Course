@@ -480,11 +480,12 @@ function setModeUI(){
   mode='online'; setModeUI(); refresh();
 });
  $('#mLocal').addEventListener('click', () => { mode='lokal'; setModeUI(); refresh(); });
-
+    
+const PROGRAM_NAMES = { conv:'Daily Conversation', gram:'Grammar Mastery', toefl:'TOEFL ITP Intensive', debate:'Public Speaking & Debate', vocab:'Vocabulary Sprint: 500 Words', story:'Storytelling & Writing Club', kids:'English for Kids (7–12 th)' };
 const NORM = r => ({
   id: r.id, name: r.nama ?? r.name ?? '', phone: r.wa ?? r.phone ?? '',
   school: r.sekolah ?? r.school ?? '', reason: r.alasan ?? r.reason ?? '',
-  program: r.program ?? '', type: r.tipe ?? r.type ?? 'reg',
+  program: r.program || PROGRAM_NAMES[r.programId] || '',
   date: typeof r.tanggal === 'string' ? Date.parse(r.tanggal) || 0 : (r.date ?? 0),
 });
 
