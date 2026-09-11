@@ -1,5 +1,5 @@
 // sw.js — PEC Pantura English Course
-const CACHE = 'pec-v4';
+const CACHE = 'pec-v5';
 const ASSETS = ['./'];
 
 self.addEventListener('install', e => {
