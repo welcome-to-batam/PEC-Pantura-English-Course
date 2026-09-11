@@ -646,6 +646,7 @@
           <p class="sec-note">Tersimpan di perangkatmu sendiri. Kartu member digital PEC muncul setelah formulir terkirim.</p>
         </div>
         <div id="regList" class="reveal"></div>
+        <a class="btn btn-inv" id="btnWaAdmin" style="margin-top:22px" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Hubungi Admin PEC</a>
       </div>
     </section>
 
@@ -931,6 +932,7 @@ let deferredPrompt = null;
 
 const ENDPOINT = ''; // ← tempel URL Apps Script di sini (langkah setup)
 const TOKEN    = 'pec-secret-2025';
+const ADMIN_WA = '6283879387000'; // ← NOMOR WA ADMIN ASLI, awali 62
 const seatsLeft = p => p.seats - p.taken - regs.filter(r => r.programId === p.id && r.type === 'reg').length;
 const priceLabel = p => p.price === 0 ? 'Gratis' : `Rp ${p.price}rb/bln`;
 const byId = id => PROGRAMS.find(p => p.id === id);
@@ -1526,6 +1528,7 @@ document.addEventListener('keydown', e => {
 });
 
 /* ---------- init ---------- */
+$('#btnWaAdmin').href = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Halo Admin PEC, saya mau bertanya soal pendaftaran program.')}`;
 renderList();
 renderRegs();
 refreshInstallUI();
