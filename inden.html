@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PEC — Pantura English Course</title>
+<meta name="description" content="PEC — Pantura English Course: katalog program & pendaftaran kelas bahasa Inggris. Conversation, grammar, TOEFL, public speaking. Daftar langsung, pasang sebagai aplikasi.">
+<meta name="theme-color" content="#0F3239">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --paper:#F6F1E5; --paper2:#EFE8D8;
+    --ink:#0F3239; --ink2:#0A252B;
+    --accent:#E4572E; --gold:#E8B33C;
+    --muted:#57696B;
+    --hair:rgba(15,50,57,.18);
+    --w:min(1180px, 100% - 48px);
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"Space Grotesk", "Segoe UI", sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:86px;color-scheme:light}
+  body{
+    font-family:var(--sans); background:var(--paper); color:var(--ink);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.55;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  body > *{position:relative; z-index:1}
+  [hidden]{display:none !important}
+  ::selection{background:var(--gold); color:var(--ink)}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+  svg.lucide{stroke-width:1.8}
+  .modal-wrap .scrim{pointer-events:none !important}
+  .modal-wrap.show .scrim{pointer-events:auto}
+
+  /* ---------- util ---------- */
+  .wrap{width:var(--w); margin-inline:auto}
+  .micro{font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:600}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; cursor:pointer;
+    font-family:var(--sans); font-weight:600; font-size:15px;
+    padding:14px 22px; border-radius:10px; border:1.5px solid var(--ink);
+    transition:transform .15s ease, box-shadow .15s ease, background .2s, color .2s;
+    text-decoration:none; color:var(--ink); background:transparent; user-select:none;
+  }
+  .btn .lucide{width:18px;height:18px}
+  .btn-primary{background:var(--ink); color:var(--paper)}
+  .btn-primary:hover{background:var(--ink2)}
+  .btn-accent{background:var(--accent); color:var(--paper); border-color:var(--ink); box-shadow:4px 4px 0 var(--ink)}
+  .btn-accent:hover{transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink)}
+  .btn-accent:active{transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ink)}
+  .btn-ghost:hover{background:rgba(15,50,57,.08)}
+  .btn[disabled]{opacity:.45; pointer-events:none}
+  .tag{
+    display:inline-block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+    font-weight:600; border:1px solid var(--hair); border-radius:4px; padding:3px 8px; color:var(--muted);
+  }
+  .chip{
+    display:inline-flex; align-items:center; gap:7px; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; font-weight:700; border:1.5px solid var(--ink); border-radius:999px; padding:5px 12px;
+  }
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent); animation:pulse 1.6s infinite}
+  .chip.full{background:rgba(15,50,57,.1); color:var(--muted); border-color:transparent}
+  .chip.gold{color:#8a6a1a; border-color:#8a6a1a}
+  @keyframes pulse{50%{opacity:.35}}
+
+  .offline-bar{
+    background:var(--accent); color:var(--paper); font-size:13px; font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:9px; padding:9px 16px;
+  }
+  .offline-bar .lucide{width:16px;height:16px}
+
+  /* ---------- header ---------- */
+  .site-head{
+    position:sticky; top:0; z-index:50; background:var(--paper);
+    border-bottom:1.5px solid var(--ink);
+  }
+  .site-head .wrap{display:flex; align-items:center; gap:26px; height:70px}
+  .brand{display:flex; align-items:center; gap:13px; text-decoration:none; color:var(--ink)}
+  .brand .mono-box{
+    min-width:52px; height:42px; padding:0 9px; background:var(--ink); color:var(--paper); border-radius:10px;
+    display:grid; place-items:center; font-family:var(--serif); font-style:italic; font-weight:700; font-size:16.5px;
+  }
+  .brand .mono-box b{color:var(--gold)}
+  .brand-txt strong{display:block; font-family:var(--serif); font-size:17.5px; font-weight:600; line-height:1.1; white-space:nowrap}
+  .brand-txt span{display:block; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-top:3px}
+  .head-nav{display:flex; gap:24px; margin-left:auto; align-items:center}
+  .head-nav a{
+    color:var(--ink); text-decoration:none; font-size:14.5px; font-weight:500; position:relative;
+  }
+  .head-nav a:hover{ text-decoration:underline; text-decoration-color:var(--accent); text-decoration-thickness:3px; text-underline-offset:6px }
+  .nav-badge{
+    display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 5px; margin-left:6px;
+    background:var(--accent); color:var(--paper); border-radius:999px; font-size:11px; font-weight:700;
+  }
+  .btn-install-sm{padding:10px 16px; font-size:13.5px; border-radius:9px}
+  .app-badge{
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+    border:1.5px solid var(--ink); border-radius:999px; padding:7px 14px; display:inline-flex; align-items:center; gap:8px;
+    background:transparent; color:var(--ink); cursor:default; font-family:var(--sans);
+  }
+  .app-badge .lucide{width:14px;height:14px}
+  @media(max-width:940px){ .head-nav a{display:none} }
+
+  /* ---------- hero ---------- */
+  .hero{padding:72px 0 64px}
+  .hero .wrap{display:grid; grid-template-columns:1.35fr .85fr; gap:56px; align-items:start}
+  .kicker{color:var(--accent)}
+  .hero h1{
+    font-family:var(--serif); font-weight:560; font-size:clamp(46px, 7.4vw, 96px);
+    line-height:1.02; letter-spacing:-.01em; margin:20px 0 24px;
+  }
+  .hero h1 .hl{display:block}
+  .uword{position:relative; font-style:italic; font-weight:480; white-space:nowrap}
+  .uword svg{position:absolute; left:-2%; bottom:-.08em; width:104%; height:.16em; color:var(--accent)}
+  .hero p.lede{font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.65; color:var(--muted); max-width:52ch; margin-bottom:34px}
+  .hero-cta{display:flex; gap:16px; flex-wrap:wrap; align-items:center}
+  .rise{opacity:0; animation:rise .85s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rise{from{opacity:0; transform:translateY(28px)} to{opacity:1; transform:none}}
+
+  .board{
+    border:1.5px solid var(--ink); border-radius:14px; background:var(--paper);
+    box-shadow:7px 7px 0 var(--ink); overflow:hidden;
+  }
+  .board-head{
+    display:flex; align-items:center; gap:9px; padding:13px 18px;
+    border-bottom:1.5px solid var(--ink); background:var(--paper2);
+  }
+  .board-head .lucide{width:15px;height:15px}
+  .board-body{padding:20px 18px 16px}
+  .board-name{font-family:var(--serif); font-size:24px; font-weight:600; line-height:1.15}
+  .board-when{font-size:13px; color:var(--muted); margin-top:5px; display:flex; align-items:center; gap:7px}
+  .board-when .lucide{width:14px;height:14px}
+  .board-count{
+    font-variant-numeric:tabular-nums; font-weight:700; letter-spacing:.04em;
+    font-size:clamp(30px,3.2vw,38px); margin:14px 0 4px;
+  }
+  .board-count small{font-size:13px; font-weight:600; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; display:block; margin-top:2px}
+  .board-foot{
+    border-top:1px solid var(--hair); padding:13px 18px; display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:600;
+  }
+  .board-foot .dot{width:9px;height:9px;border-radius:50%;background:var(--accent); animation:pulse 1.6s infinite}
+  .board-foot.closed .dot{background:var(--muted); animation:none}
+  .board-cap{font-size:11.5px; color:var(--muted); margin-top:12px; line-height:1.5}
+  @media(max-width:940px){
+    .hero .wrap{grid-template-columns:1fr; gap:40px}
+  }
+
+  .stats{border-top:1.5px solid var(--ink); border-bottom:1.5px solid var(--ink); margin-top:26px}
+  .stats .wrap{display:flex; flex-wrap:wrap}
+  .stat{
+    flex:1 1 200px; padding:26px 26px 24px; display:flex; flex-direction:column; gap:6px;
+    border-left:1px solid var(--hair);
+  }
+  .stat:first-child{border-left:none; padding-left:0}
+  .stat b{font-family:var(--serif); font-weight:600; font-size:clamp(34px,3.6vw,46px); line-height:1}
+  .stat span{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:600}
+
+  /* ---------- marquee ---------- */
+  .marquee{background:var(--ink); color:var(--paper); overflow:hidden; padding:13px 0; border-bottom:1.5px solid var(--ink)}
+  .marquee-track{display:flex; width:max-content; animation:mq 28s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-track span{
+    font-size:13px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; white-space:nowrap; padding-right:.5em;
+  }
+  .marquee-track i{color:var(--gold); font-style:normal; padding:0 .9em}
+  @keyframes mq{to{transform:translateX(-50%)}}
+
+  /* ---------- sections ---------- */
+  .sec{padding:92px 0}
+  .sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:36px; flex-wrap:wrap}
+  .sec-title{font-family:var(--serif); font-weight:560; font-size:clamp(32px,4.6vw,54px); line-height:1.05; margin-top:14px}
+  .sec-title em{font-style:italic; font-weight:480}
+  .sec-note{font-size:14px; color:var(--muted); max-width:38ch; line-height:1.6}
+
+  .toolbar{display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:8px}
+  .search{
+    display:flex; align-items:center; gap:10px; border:1.5px solid var(--ink); border-radius:10px;
+    padding:12px 15px; background:var(--paper); flex:1 1 280px; max-width:380px;
+  }
+  .search .lucide{width:17px;height:17px; color:var(--muted); flex:none}
+  .search input{border:none; outline:none; background:transparent; font:inherit; font-size:14.5px; width:100%; color:var(--ink)}
+  .search input::placeholder{color:var(--muted)}
+  .chips{display:flex; flex-wrap:wrap; gap:9px}
+  .chip-f{
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer; font:inherit;
+    font-size:13px; font-weight:600; padding:9px 15px; border-radius:999px; border:1.5px solid var(--ink);
+    background:transparent; color:var(--ink); transition:background .2s,color .2s;
+  }
+  .chip-f em{font-style:normal; opacity:.5; font-size:12px}
+  .chip-f .lucide{width:13px;height:13px}
+  .chip-f:hover{background:rgba(15,50,57,.07)}
+  .chip-f.active{background:var(--ink); color:var(--paper)}
+  .chip-f.active em{opacity:.7}
+  .result-count{font-size:12.5px; color:var(--muted); margin:10px 0 6px}
+
+  .prow{
+    display:grid; align-items:center; gap:8px 18px; cursor:pointer;
+    grid-template-columns:60px 1.45fr 1fr 120px 128px 52px;
+    grid-template-areas:"idx main meta price status go";
+    padding:26px 18px; border-top:1px solid var(--hair);
+    transition:background .3s ease, color .3s ease; position:relative;
+  }
+  #programList .prow:last-child{border-bottom:1px solid var(--hair)}
+  .prow:hover, .prow:focus-visible{background:var(--ink); color:var(--paper)}
+  .prow-idx{grid-area:idx; font-family:var(--serif); font-style:italic; font-size:19px; opacity:.55}
+  .prow-main{grid-area:main; min-width:0}
+  .prow-name{font-family:var(--serif); font-weight:600; font-size:clamp(22px,2.6vw,32px); line-height:1.12; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .prow-name .lucide{width:16px;height:16px; color:var(--gold); flex:none}
+  .prow-tags{display:flex; gap:7px; margin-top:9px; flex-wrap:wrap}
+  .prow:hover .tag{border-color:rgba(246,241,229,.35); color:rgba(246,241,229,.75)}
+  .prow-meta{grid-area:meta; display:flex; flex-direction:column; gap:7px; font-size:13.5px}
+  .prow-meta > div{display:flex; align-items:center; gap:9px}
+  .prow-meta .lucide{width:15px;height:15px; opacity:.7; flex:none}
+  .prow-price{grid-area:price; font-weight:700; font-size:15px}
+  .prow-price.free{color:var(--accent)}
+  .prow:hover .prow-price.free{color:var(--gold)}
+  .prow-status{grid-area:status}
+  .prow-go{
+    grid-area:go; width:44px;height:44px; border:1.5px solid currentColor; border-radius:50%;
+    display:grid; place-items:center; transition:transform .25s ease;
+  }
+  .prow-go .lucide{width:18px;height:18px}
+  .prow:hover .prow-go{transform:translate(3px,-3px)}
+  .prow-save{
+    position:absolute; right:74px; top:22px; width:34px;height:34px; border:none; background:transparent;
+    color:inherit; opacity:.5; cursor:pointer; display:grid; place-items:center; border-radius:8px;
+  }
+  .prow-save:hover{opacity:1; background:rgba(128,128,128,.15)}
+  .prow-save.on{opacity:1}
+  .prow-save.on .lucide{fill:var(--accent); stroke:var(--accent)}
+  #programList.swap{animation:swap .45s ease}
+  @keyframes swap{from{opacity:0; transform:translateY(12px)}}
+  .empty{padding:70px 20px; text-align:center; border:1.5px dashed var(--hair); border-radius:16px; margin-top:16px}
+  .empty .lucide{width:44px;height:44px; opacity:.4}
+  .empty h3{font-family:var(--serif); font-size:24px; margin:16px 0 8px}
+  .empty p{color:var(--muted); margin-bottom:22px}
+  @media(max-width:900px){
+    .prow{
+      grid-template-columns:1fr auto;
+      grid-template-areas:"idx go" "main main" "meta meta" "price status";
+      padding:22px 14px;
+    }
+    .prow-save{right:14px; top:auto; bottom:20px}
+    .prow-go{width:40px;height:40px}
+  }
+
+  /* ---------- band ink ---------- */
+  .band-ink{background:var(--ink); color:var(--paper)}
+  .band-ink .sec-note{color:rgba(246,241,229,.6)}
+  .reg-item{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding:24px 0;
+    border-top:1px solid rgba(246,241,229,.18);
+  }
+  .reg-item:last-child{border-bottom:1px solid rgba(246,241,229,.18)}
+  .reg-main{flex:1 1 300px; min-width:0}
+  .reg-name{font-family:var(--serif); font-weight:600; font-size:clamp(20px,2.4vw,26px)}
+  .reg-sub{font-size:12.5px; color:rgba(246,241,229,.62); margin-top:7px; letter-spacing:.03em}
+  .reg-side{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .band-ink .chip{border-color:rgba(246,241,229,.4); color:rgba(246,241,229,.85)}
+  .band-ink .chip.wl{border-color:var(--gold); color:var(--gold)}
+  .reg-cancel{
+    width:38px;height:38px; border:1px solid rgba(246,241,229,.35); background:transparent; color:var(--paper);
+    border-radius:9px; cursor:pointer; display:grid; place-items:center; font:inherit; font-size:12.5px; font-weight:700;
+    transition:background .2s,color .2s,border-color .2s; padding:0 10px;
+  }
+  .reg-cancel:hover{background:rgba(246,241,229,.12)}
+  .reg-cancel.armed{background:var(--accent); border-color:var(--accent); color:var(--paper)}
+  .reg-card{
+    width:38px;height:38px; border:1px solid rgba(246,241,229,.35); background:transparent; color:var(--paper);
+    border-radius:9px; cursor:pointer; display:grid; place-items:center; font:inherit; padding:0;
+    transition:background .2s,color .2s,border-color .2s;
+  }
+  .reg-card:hover{background:rgba(246,241,229,.12)}
+  .reg-card .lucide{width:16px;height:16px}
+  .reg-empty{
+    border:1.5px dashed rgba(246,241,229,.3); border-radius:16px; padding:60px 24px; text-align:center;
+  }
+  .reg-empty .lucide{width:42px;height:42px; opacity:.5}
+  .reg-empty h3{font-family:var(--serif); font-size:24px; margin:16px 0 8px}
+  .reg-empty p{color:rgba(246,241,229,.6); margin-bottom:24px}
+  .btn-inv{border-color:var(--paper); color:var(--paper)}
+  .btn-inv:hover{background:rgba(246,241,229,.1)}
+
+  /* ---------- alur ---------- */
+  .step{display:grid; grid-template-columns:130px 1fr; gap:20px; padding:30px 0; border-top:1px solid var(--hair); align-items:start}
+  .step:last-of-type{border-bottom:1px solid var(--hair)}
+  .step-no{font-family:var(--serif); font-style:italic; font-weight:480; font-size:clamp(44px,5vw,62px); color:var(--accent); line-height:1}
+  .step h3{font-family:var(--serif); font-weight:600; font-size:clamp(22px,2.6vw,30px); margin-bottom:8px}
+  .step p{color:var(--muted); line-height:1.65; max-width:56ch}
+  @media(max-width:640px){ .step{grid-template-columns:1fr; gap:8px} }
+
+  /* ---------- footer ---------- */
+  footer{border-top:1.5px solid var(--ink); padding:56px 0 0; margin-top:20px}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px; padding-bottom:44px}
+  .foot-grid h4{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:14px}
+  .foot-brand strong{font-family:var(--serif); font-size:26px; font-weight:600}
+  .foot-brand strong b{color:var(--accent)}
+  .foot-brand p{color:var(--muted); font-size:14px; line-height:1.65; margin-top:10px; max-width:34ch}
+  .foot-list{font-size:14.5px; line-height:2; color:var(--ink)}
+  .foot-list .lucide{width:15px;height:15px; margin-right:9px; vertical-align:-2px; opacity:.7}
+  .foot-actions{display:flex; flex-direction:column; gap:12px; align-items:flex-start}
+  .foot-bottom{border-top:1px solid var(--hair); padding:20px 0; font-size:12.5px; color:var(--muted); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+  .foot-bottom a{color:var(--muted)}
+  @media(max-width:820px){ .foot-grid{grid-template-columns:1fr; gap:32px} }
+
+  /* ---------- scrim & detail ---------- */
+  .scrim{
+    position:fixed; inset:0; background:rgba(10,37,43,.55); z-index:80;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .scrim.show{opacity:1; pointer-events:auto}
+  .detail{
+    position:fixed; top:0; right:0; height:100dvh; width:min(560px,100%); z-index:90;
+    background:var(--paper); border-left:1.5px solid var(--ink);
+    transform:translateX(102%); transition:transform .42s cubic-bezier(.25,.9,.3,1);
+    display:flex; flex-direction:column;
+  }
+  .detail.open{transform:none}
+  .detail-scroll{overflow-y:auto; flex:1; padding:28px clamp(20px,4vw,36px) 24px}
+  .detail-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:26px}
+  .cat-line{display:flex; align-items:center; gap:11px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; font-weight:700}
+  .cat-ic{width:38px;height:38px; border:1.5px solid var(--ink); border-radius:10px; display:grid; place-items:center; background:var(--paper2)}
+  .cat-ic .lucide{width:18px;height:18px}
+  .icon-btn{
+    width:42px;height:42px; border:1.5px solid var(--ink); background:transparent; color:var(--ink);
+    border-radius:10px; cursor:pointer; display:grid; place-items:center; transition:background .2s,color .2s;
+  }
+  .icon-btn:hover{background:var(--ink); color:var(--paper)}
+  .icon-btn .lucide{width:19px;height:19px}
+  .icon-btn.on{background:var(--accent); border-color:var(--accent); color:var(--paper)}
+  .icon-btn.on .lucide{fill:var(--paper)}
+  .d-name{font-family:var(--serif); font-weight:600; font-size:clamp(32px,5vw,44px); line-height:1.06}
+  .d-tagline{font-family:var(--serif); font-style:italic; font-size:18px; color:var(--muted); margin-top:12px; line-height:1.5}
+  .d-desc{margin:22px 0; line-height:1.75; font-size:15.5px}
+  .d-sub{font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--accent); margin:28px 0 14px}
+  .d-mods{list-style:none; display:flex; flex-direction:column; gap:12px}
+  .d-mods li{display:flex; gap:11px; font-size:15px; line-height:1.55; align-items:flex-start}
+  .d-mods .lucide{width:19px;height:19px; color:var(--accent); flex:none; margin-top:2px}
+  .d-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 22px; border:1.5px solid var(--ink); border-radius:14px; padding:20px; background:var(--paper2)}
+  .d-grid dt{font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:4px}
+  .d-grid dd{font-weight:600; font-size:15px}
+  .d-mentor{display:flex; align-items:center; gap:15px; border:1.5px solid var(--ink); border-radius:14px; padding:16px 18px}
+  .d-ava{
+    width:50px;height:50px; border-radius:50%; border:1.5px solid var(--ink); background:var(--paper);
+    display:grid; place-items:center; font-family:var(--serif); font-style:italic; font-size:19px; flex:none;
+  }
+  .d-mentor b{display:block; font-size:15.5px}
+  .d-mentor span{font-size:12.5px; color:var(--muted)}
+  .detail-foot{
+    border-top:1.5px solid var(--ink); padding:18px clamp(20px,4vw,36px);
+    display:flex; align-items:center; justify-content:space-between; gap:16px; background:var(--paper);
+  }
+  .d-price small{display:block; font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:3px}
+  .d-price b{font-family:var(--serif); font-size:25px; font-weight:600}
+  .d-price b.free{color:var(--accent)}
+
+  /* ---------- formulir ---------- */
+  .overlay{
+    position:fixed; inset:0; z-index:100; background:rgba(10,37,43,.58);
+    display:flex; align-items:flex-end; justify-content:center; padding:0;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .overlay.show{opacity:1; pointer-events:auto}
+  .sheet{
+    background:var(--paper); width:100%; max-width:640px; max-height:94dvh; overflow-y:auto;
+    border:1.5px solid var(--ink); border-radius:20px 20px 0 0; box-shadow:0 -10px 40px rgba(10,37,43,.3);
+    transform:translateY(40px); transition:transform .4s cubic-bezier(.25,.9,.3,1);
+    display:flex; flex-direction:column;
+  }
+  .overlay.show .sheet{transform:none}
+  @media(min-width:700px){
+    .overlay{align-items:center; padding:24px}
+    .sheet{border-radius:18px}
+  }
+  .sheet-head{
+    padding:22px clamp(20px,4vw,32px) 18px; border-bottom:1.5px solid var(--ink);
+    display:flex; align-items:flex-start; gap:16px; position:sticky; top:0; background:var(--paper); z-index:2;
+  }
+  .sheet-head h3{font-family:var(--serif); font-weight:600; font-size:clamp(22px,3vw,30px); line-height:1.1; margin-top:6px}
+  .sheet-step{margin-left:auto; flex:none; font-variant-numeric:tabular-nums; font-weight:700; font-size:13px; border:1.5px solid var(--ink); border-radius:999px; padding:6px 13px; margin-top:6px}
+  .sheet-body{padding:26px clamp(20px,4vw,32px)}
+  .field{display:block; margin-bottom:20px}
+  .field > span{display:block; font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:9px}
+  .field > span b{color:var(--accent)}
+  .field input, .field textarea{
+    width:100%; font:inherit; font-size:15.5px; padding:14px 16px; color:var(--ink);
+    border:1.5px solid var(--ink); border-radius:11px; background:var(--paper); outline:none;
+    transition:box-shadow .2s, border-color .2s;
+  }
+  .field textarea{resize:vertical; min-height:92px}
+  .field input:focus, .field textarea:focus{box-shadow:3px 3px 0 var(--ink)}
+  .field.invalid input{border-color:var(--accent); box-shadow:3px 3px 0 var(--accent)}
+  .ferr{display:none; font-style:normal; color:var(--accent); font-size:12.5px; font-weight:600; margin-top:7px}
+  .field.invalid .ferr{display:block}
+  .fhint{font-size:12px; color:var(--muted); text-align:right; margin-top:6px}
+  .sum{border:1.5px solid var(--ink); border-radius:14px; overflow:hidden; margin-bottom:24px}
+  .sum-row{display:flex; justify-content:space-between; gap:20px; padding:14px 18px; border-top:1px solid var(--hair); font-size:14.5px}
+  .sum-row:first-child{border-top:none}
+  .sum-row dt{color:var(--muted)}
+  .sum-row dd{font-weight:600; text-align:right}
+  .agree{display:flex; gap:12px; align-items:flex-start; font-size:14px; line-height:1.55; cursor:pointer}
+  .agree input{width:20px;height:20px; accent-color:var(--ink); margin-top:1px; flex:none; cursor:pointer}
+  .sheet-foot{
+    position:sticky; bottom:0; background:var(--paper); border-top:1.5px solid var(--ink);
+    padding:16px clamp(20px,4vw,32px); display:flex; gap:12px; justify-content:flex-end;
+  }
+  .success{padding:38px clamp(20px,4vw,32px) 10px; text-align:center}
+  .okmark{width:76px; height:76px; margin:0 auto 20px; display:block}
+  .okmark circle{fill:var(--gold); stroke:var(--ink); stroke-width:2.5; stroke-dasharray:100; stroke-dashoffset:100; animation:draw .7s ease .1s forwards}
+  .okmark path{fill:none; stroke:var(--ink); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:100; stroke-dashoffset:100; animation:draw .5s ease .6s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .success h3{font-family:var(--serif); font-size:30px; font-weight:600}
+  .success > p{color:var(--muted); line-height:1.65; margin:12px auto 22px; max-width:44ch}
+  .regid{
+    display:inline-flex; align-items:center; gap:11px; cursor:pointer; font:inherit;
+    font-family:var(--sans); font-weight:700; letter-spacing:.14em; font-size:15px;
+    border:1.5px dashed var(--ink); border-radius:10px; padding:13px 18px; background:var(--paper2);
+    transition:box-shadow .2s;
+  }
+  .regid:hover{box-shadow:3px 3px 0 var(--ink)}
+  .regid .lucide{width:16px;height:16px}
+  .success-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:28px 0 6px}
+
+  .card-zone{margin:26px clamp(20px,4vw,32px) 8px; display:flex; flex-direction:column; align-items:center; gap:16px}
+  .member-card{width:min(430px,100%); aspect-ratio:1.586; perspective:1300px}
+  .mc-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .8s cubic-bezier(.3,.8,.3,1)}
+  .member-card.flipped .mc-inner{transform:rotateY(180deg)}
+  .mc-face{
+    position:absolute; inset:0; border-radius:16px; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    border:1.5px solid var(--ink); padding:22px 24px; overflow:hidden; box-shadow:6px 6px 0 rgba(15,50,57,.25);
+  }
+  .mc-front{background:var(--ink); color:var(--paper); display:flex; flex-direction:column}
+  .mc-top{display:flex; justify-content:space-between; align-items:baseline}
+  .mc-logo{font-family:var(--serif); font-style:italic; font-weight:700; font-size:22px}
+  .mc-logo b{color:var(--accent)}
+  .mc-top span{font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:rgba(246,241,229,.6); font-weight:700}
+  .mc-name{
+    font-family:var(--serif); font-weight:600; font-size:clamp(22px,5vw,29px); line-height:1.1; text-transform:uppercase;
+    margin-top:auto; word-break:break-word;
+  }
+  .mc-prog{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-top:9px}
+  .mc-bottom{display:flex; justify-content:space-between; align-items:flex-end; margin-top:18px}
+  .mc-since{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(246,241,229,.65); font-weight:600}
+  .mc-active{font-size:10px; letter-spacing:.14em; font-weight:700; color:var(--ink); background:var(--gold); border-radius:4px; padding:4px 9px}
+  .stamp{position:absolute; right:14px; top:44px; width:88px; height:88px; color:var(--gold); animation:spin 26s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .mc-back{background:var(--paper); color:var(--ink); transform:rotateY(180deg); display:flex; flex-direction:column;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Ccircle cx='2' cy='2' r='1.1' fill='%230F3239' fill-opacity='.14'/%3E%3C/svg%3E");
+  }
+  .mc-back .reglabel{font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:700}
+  .mc-back .regval{font-weight:700; letter-spacing:.14em; font-size:clamp(16px,4vw,21px); margin-top:6px}
+  .mc-back canvas{width:100%; max-width:300px; height:52px; margin-top:auto}
+  .mc-back p{font-size:11.5px; color:var(--muted); margin-top:10px}
+  .btn-flip{padding:11px 20px; font-size:13.5px}
+
+  /* ---------- modal install ---------- */
+  .modal-wrap{position:fixed; inset:0; z-index:110; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s}
+  .modal-wrap.show{opacity:1; pointer-events:auto}
+  .modal-wrap .scrim{z-index:-1}
+  .modal{
+    background:var(--paper); border:1.5px solid var(--ink); border-radius:18px; width:min(520px,100%);
+    box-shadow:8px 8px 0 var(--ink); overflow:hidden; transform:translateY(24px) scale(.98); transition:transform .35s cubic-bezier(.25,.9,.3,1);
+  }
+  .modal-wrap.show .modal{transform:none}
+  .modal-head{display:flex; align-items:center; justify-content:space-between; padding:20px 24px; border-bottom:1.5px solid var(--ink)}
+  .modal-head h3{font-family:var(--serif); font-size:25px; font-weight:600}
+  .modal-body{padding:22px 24px; font-size:14.5px; line-height:1.65}
+  .modal-body ol{margin:14px 0 0 20px; display:flex; flex-direction:column; gap:9px}
+  .modal-note{font-size:12.5px; color:var(--muted); margin-top:18px; line-height:1.6; border-top:1px solid var(--hair); padding-top:14px}
+  .modal-foot{padding:16px 24px 22px; display:flex; gap:12px; flex-wrap:wrap}
+
+  /* ---------- toast ---------- */
+  .toast-wrap{position:fixed; left:50%; transform:translateX(-50%); bottom:28px; z-index:130; display:flex; flex-direction:column; gap:10px; align-items:center; width:max-content; max-width:calc(100vw - 32px)}
+  @media(max-width:760px){ .toast-wrap{bottom:calc(72px + 18px)} }
+  .toast{
+    display:flex; align-items:center; gap:11px; background:var(--ink); color:var(--paper);
+    border-radius:12px; padding:14px 20px; font-size:14px; font-weight:600; box-shadow:5px 5px 0 rgba(15,50,57,.3);
+    animation:tin .35s cubic-bezier(.25,.9,.3,1); max-width:100%;
+  }
+  .toast .lucide{width:18px;height:18px; color:var(--gold); flex:none}
+  .toast.warn .lucide{color:var(--accent)}
+  .toast.out{animation:tout .3s ease forwards}
+  @keyframes tin{from{opacity:0; transform:translateY(16px)}}
+  @keyframes tout{to{opacity:0; transform:translateY(12px)}}
+
+  /* ---------- bottom nav ---------- */
+  .bottom-nav{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:60;
+    background:var(--paper); border-top:1.5px solid var(--ink);
+    padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+  }
+  .bottom-nav button{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;
+    background:none; border:none; font:inherit; font-size:11px; font-weight:600; color:var(--muted);
+    padding:8px 4px; border-radius:10px; transition:color .2s;
+  }
+  .bottom-nav button .lucide{width:21px;height:21px}
+  .bottom-nav button.active{color:var(--ink)}
+  .bottom-nav button.active .lucide{color:var(--accent)}
+  @media(max-width:760px){
+    .bottom-nav{display:flex}
+    main{padding-bottom:76px}
+    .sec{padding:64px 0}
+  }
+
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1; transform:none}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important}
+    .marquee-track{animation:none}
+    .reveal{opacity:1; transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="offline-bar" id="offlineBar" hidden>
+    <i data-lucide="wifi-off"></i> Kamu sedang offline — halaman tetap bisa dijelajahi.
+  </div>
+
+  <header class="site-head">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="PEC — Pantura English Course">
+        <span class="mono-box">PEC<b>.</b></span>
+        <span class="brand-txt">
+          <strong>Pantura English Course</strong>
+          <span>PEC · Program 2025</span>
+        </span>
+      </a>
+      <nav class="head-nav">
+        <a href="#program">Program</a>
+        <a href="#pendaftaran">Pendaftaran Saya<span class="nav-badge" id="navRegBadge" hidden>0</span></a>
+        <a href="#alur">Cara Gabung</a>
+        <button class="app-badge" id="appBadge" hidden><i data-lucide="badge-check"></i> Mode App</button>
+        <button class="btn btn-primary btn-install-sm js-install"><i data-lucide="download"></i> Install</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <p class="micro kicker rise" style="animation-delay:.05s">Pantura English Course — Halaman Program · Intake 2025</p>
+          <h1>
+            <span class="hl rise" style="animation-delay:.12s">Pilih kursusmu,</span>
+            <span class="hl rise" style="animation-delay:.22s">mulai
+              <span class="uword">berbicara<svg viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 10 C 42 3, 84 12, 124 7 S 198 4, 217 8" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/></svg></span>.
+            </span>
+          </h1>
+          <p class="lede rise" style="animation-delay:.32s">
+            <b>PEC — Pantura English Course.</b> Tujuh program terstruktur — dari percakapan pemula
+            sampai persiapan TOEFL — ditata seperti kurikulum kecil yang serius:
+            kelas kecil, mentor hadir, progres terukur.
+          </p>
+          <div class="hero-cta rise" style="animation-delay:.42s">
+            <a class="btn btn-accent" href="#program">Lihat Program <i data-lucide="arrow-down"></i></a>
+            <a class="btn btn-ghost" href="#alur">Cara bergabung</a>
+          </div>
+        </div>
+
+        <div class="rise" style="animation-delay:.5s">
+          <div class="board" aria-live="polite">
+            <div class="board-head">
+              <i data-lucide="radio"></i> <span class="micro">Papan Sesi — Live</span>
+            </div>
+            <div class="board-body">
+              <div class="board-name" id="nbName">—</div>
+              <div class="board-when"><i data-lucide="calendar"></i><span id="nbWhen">—</span></div>
+              <div class="board-count"><span id="nbCount">--:--:--</span><small>menuju sesi terdekat</small></div>
+            </div>
+            <div class="board-foot" id="clubStatus"><span class="dot"></span><span id="clubStatusText">…</span></div>
+          </div>
+          <p class="board-cap">Diperbarui setiap detik — jadwal digabung dari seluruh program di PEC.</p>
+        </div>
+      </div>
+
+      <div class="stats reveal">
+        <div class="wrap">
+          <div class="stat"><b data-count="7">0</b><span>Program kursus</span></div>
+          <div class="stat"><b data-count="340" data-suffix="+">0</b><span>Alumni PEC</span></div>
+          <div class="stat"><b data-count="12">0</b><span>Mentor</span></div>
+          <div class="stat"><b data-count="92" data-suffix="%">0</b><span>Rerata kehadiran</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="mqTrack"></div>
+    </div>
+
+    <section class="sec" id="program">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <p class="micro kicker">Katalog 2025</p>
+            <h2 class="sec-title">Tujuh program,<br><em>satu tujuan:</em> berani.</h2>
+          </div>
+          <p class="sec-note">Semua kelas tatap muka di PEC dengan kuota kecil. Kursi terkunci setelah formulir terkirim.</p>
+        </div>
+
+        <div class="toolbar reveal">
+          <label class="search">
+            <i data-lucide="search"></i>
+            <input id="searchInput" type="search" placeholder="Cari program, level, atau jadwal…" aria-label="Cari program">
+          </label>
+          <div class="chips" id="chipRow" role="tablist" aria-label="Filter kategori"></div>
+        </div>
+        <p class="result-count" id="resultCount"></p>
+
+        <div id="programList"></div>
+
+        <div class="empty" id="emptyState" hidden>
+          <i data-lucide="search-x"></i>
+          <h3>Tidak ada program yang cocok</h3>
+          <p>Coba kata kunci lain, atau atur ulang filternya.</p>
+          <button class="btn btn-ghost" id="btnReset"><i data-lucide="rotate-ccw"></i> Reset filter</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec band-ink" id="pendaftaran">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <p class="micro" style="color:var(--gold)">Status kamu</p>
+            <h2 class="sec-title">Pendaftaran <em>saya</em></h2>
+          </div>
+          <p class="sec-note">Tersimpan di perangkatmu sendiri. Kartu member digital PEC muncul setelah formulir terkirim.</p>
+        </div>
+        <div id="regList" class="reveal"></div>
+        <a class="btn btn-inv" id="btnWaAdmin" style="margin-top:22px" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Hubungi Admin PEC</a>
+      </div>
+    </section>
+
+    <section class="sec" id="alur">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <p class="micro kicker">Tanpa drama</p>
+            <h2 class="sec-title">Mulai dalam <em>tiga langkah</em></h2>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-no">01</div>
+          <div><h3>Pilih program &amp; daftar</h3><p>Temukan kursus yang cocok lewat katalog di atas, lalu kunci kursimu lewat formulir — kurang dari dua menit, langsung dapat nomor pendaftaran PEC.</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step-no">02</div>
+          <div><h3>Verifikasi via WhatsApp</h3><p>Admin PEC menghubungimu maksimal 1×24 jam untuk konfirmasi jadwal, batch intake, dan pembayaran (kalau programnya berbayar).</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step-no">03</div>
+          <div><h3>Hadir &amp; bertumbuh</h3><p>Datang ke sesi pertama dengan kartu member digitalmu. Progres kehadiranmu tercatat — target PEC: minimal 75% kehadiran per program.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <strong>Pantura English Course<b>.</b></strong>
+          <p>Kursus bahasa Inggris berbasis komunitas. Kelas kecil, mentor hadir, dan aturan sederhana: di dalam kelas PEC, pakai Bahasa Inggris.</p>
+        </div>
+        <div>
+          <h4>Operasional</h4>
+          <div class="foot-list">
+            <div><i data-lucide="clock"></i>Senin–Sabtu · 08.00–20.00</div>
+            <div><i data-lucide="map-pin"></i>Batam — Kepulauan Riau</div>
+            <div><i data-lucide="mail"></i>halo@pec-pantura.id</div>
+          </div>
+        </div>
+        <div>
+          <h4>Aplikasi &amp; kode</h4>
+          <div class="foot-actions">
+            <button class="btn btn-primary js-install"><i data-lucide="smartphone"></i> Install ke perangkat</button>
+            <a class="btn btn-ghost" href="https://github.com/welcome-to-batam/PEC-Pantura-English-Course" target="_blank" rel="noopener"><i data-lucide="github"></i> Repo GitHub</a>
+          </div>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2025 PEC — Pantura English Course</span>
+        <span>Data pendaftaran tersimpan lokal di perangkatmu.</span>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Navigasi utama">
+    <button data-target="program"><i data-lucide="book-open"></i>Program</button>
+    <button data-target="pendaftaran"><i data-lucide="user"></i>Saya</button>
+    <button class="js-install"><i data-lucide="download"></i>Pasang</button>
+  </nav>
+
+  <div class="scrim" id="scrim"></div>
+
+  <aside class="detail" id="detailPanel" aria-label="Detail program">
+    <div class="detail-scroll" id="detailBody"></div>
+    <div class="detail-foot" id="detailFoot"></div>
+  </aside>
+
+  <div class="overlay" id="formOverlay" role="dialog" aria-modal="true" aria-label="Formulir pendaftaran">
+    <div class="sheet">
+      <div class="sheet-head">
+        <div>
+          <p class="micro kicker" id="formKicker">Formulir Pendaftaran</p>
+          <h3 id="formTitle">—</h3>
+        </div>
+        <span class="sheet-step" id="formStepInd">1 / 2</span>
+        <button class="icon-btn" id="btnCloseForm" aria-label="Tutup formulir" style="margin-top:6px"><i data-lucide="x"></i></button>
+      </div>
+
+   <div class="sheet-body" id="fs1">
+        <label class="field" id="fldName">
+          <span>Nama lengkap <b>*</b></span>
+          <input id="fName" type="text" placeholder="cth. Aisyah Putri Ramadhani" maxlength="48" autocomplete="name">
+          <em class="ferr">Nama minimal 3 huruf.</em>
+        </label>
+        <label class="field" id="fldPhone">
+          <span>Nomor WhatsApp <b>*</b></span>
+          <input id="fPhone" type="tel" inputmode="tel" placeholder="08xx xxxx xxxx" maxlength="17" autocomplete="tel">
+          <em class="ferr">Masukkan nomor WhatsApp yang valid (08…/62…).</em>
+        </label>
+        <label class="field">
+          <span>Asal sekolah / kampus <span style="color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0">(opsional)</span></span>
+          <input id="fSchool" type="text" placeholder="cth. SMA Negeri 3 Batam" maxlength="48">
+        </label>
+        <label class="field" style="margin-bottom:6px">
+          <span>Kenapa ingin ikut program ini? <span style="color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0">(opsional)</span></span>
+          <textarea id="fReason" maxlength="200" placeholder="Ceritakan singkat — target, kegangguan, atau cita-citamu…"></textarea>
+          <div class="fhint"><span id="reasonCount">0</span>/200</div>
+        </label>
+      </div>
+
+      <div class="sheet-body" id="fs2" hidden>
+        <dl class="sum">
+          <div class="sum-row"><dt>Program</dt><dd id="sProg">—</dd></div>
+          <div class="sum-row"><dt>Jadwal</dt><dd id="sSched">—</dd></div>
+          <div class="sum-row"><dt>Biaya</dt><dd id="sCost">—</dd></div>
+          <div class="sum-row"><dt>Nama</dt><dd id="sName">—</dd></div>
+          <div class="sum-row"><dt>WhatsApp</dt><dd id="sPhone">—</dd></div>
+        </dl>
+        <label class="agree">
+          <input type="checkbox" id="agree">
+          <span>Saya bersedia mematuhi rules PEC: hadir minimal 75% dari total sesi, aktif berbicara Bahasa Inggris di dalam kelas, dan menghubungi admin bila berhalangan hadir. <b style="color:var(--accent)">*</b></span>
+        </label>
+        <em class="ferr" id="agreeErr" style="display:none">Centang persetujuan untuk melanjutkan.</em>
+      </div>
+
+      <div class="sheet-body" id="fSuccess" hidden style="padding:0">
+        <div class="success">
+          <svg class="okmark" id="okmark" viewBox="0 0 72 72" aria-hidden="true">
+            <circle cx="36" cy="36" r="31" pathLength="100"/>
+            <path d="M23 37 l10 10 l18 -21" pathLength="100"/>
+          </svg>
+          <h3>Pendaftaran tercatat!</h3>
+          <p>Simpan nomor pendaftaranmu. Tim PEC akan menghubungi WhatsApp-mu maksimal 1×24 jam untuk verifikasi.</p>
+          <button class="regid" id="regIdChip" title="Klik untuk menyalin">
+            <i data-lucide="copy"></i><span id="regIdVal">—</span>
+          </button>
+          <div class="success-actions">
+            <button class="btn btn-accent" id="btnShowCard"><i data-lucide="badge-check"></i> Lihat Kartu Member</button>
+            <button class="btn btn-ghost" id="btnDone">Selesai</button>
+          </div>
+        </div>
+
+        <div class="card-zone" id="cardZone" hidden>
+          <div class="member-card" id="memberCard">
+            <div class="mc-inner">
+              <div class="mc-face mc-front">
+                <div class="mc-top">
+                  <span class="mc-logo">PEC<b>.</b></span>
+                  <span>Member Card</span>
+                </div>
+                <svg class="stamp" viewBox="0 0 100 100" aria-hidden="true">
+                  <defs><path id="cir" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0"/></defs>
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4"/>
+                  <text font-size="8" letter-spacing="1.2" fill="currentColor" font-weight="700"><textPath href="#cir">PANTURA ENGLISH COURSE · EST 2025 ·</textPath></text>
+                  <text x="50" y="56" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">PEC</text>
+                </svg>
+                <div class="mc-name" id="mcName">—</div>
+                <div class="mc-prog" id="mcProg">—</div>
+                <div class="mc-bottom">
+                  <span class="mc-since" id="mcSince">Member since —</span>
+                  <span class="mc-active">ACTIVE</span>
+                </div>
+              </div>
+              <div class="mc-face mc-back">
+                <span class="reglabel">Nomor Pendaftaran</span>
+                <div class="regval" id="bcId">—</div>
+                <canvas id="bcCanvas" width="300" height="52"></canvas>
+                <p>Tunjukkan kartu ini ke admin PEC saat verifikasi WhatsApp &amp; sesi pertamamu.</p>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-flip" id="btnFlipCard"><i data-lucide="refresh-cw"></i> Putar kartu</button>
+        </div>
+      </div>
+
+      <div class="sheet-foot" id="formFoot"></div>
+    </div>
+  </div>
+
+  <div class="modal-wrap" id="installModal" role="dialog" aria-modal="true" aria-label="Pasang aplikasi">
+    <div class="scrim show" data-close style="position:absolute; inset:0; opacity:1"></div>
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Pasang aplikasinya</h3>
+        <button class="icon-btn" data-close aria-label="Tutup"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body" id="installBody"></div>
+      <div class="modal-foot" id="installFoot"></div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+
+   
