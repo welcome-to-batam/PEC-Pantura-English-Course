@@ -824,5 +824,722 @@
 
   <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
 
+<script>
+/* =========================================================
+   PEC — Pantura English Course (PWA-ready, satu berkas)
+   ========================================================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const INK = '#0F3239';
+const DAY = ['Min','Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const icons = () => window.lucide && lucide.createIcons();
 
-   
+/* ---------- data program ---------- */
+const CATS = [
+  {id:'all',      label:'Semua'},
+  {id:'speaking', label:'Speaking'},
+  {id:'language', label:'Bahasa'},
+  {id:'test',     label:'Test Prep'},
+  {id:'writing',  label:'Writing'},
+  {id:'kids',     label:'Anak'},
+];
+const CAT_ICON = {speaking:'mic', language:'languages', test:'graduation-cap', writing:'pen-line', kids:'baby'};
+
+const PROGRAMS = [
+  { id:'conv', name:'Daily Conversation', cat:'speaking', catLabel:'Speaking', level:'Pemula',
+    days:'Sen · Rab · Jum', time:'16.00–17.30', sched:[{d:1,t:'16:00'},{d:3,t:'16:00'},{d:5,t:'16:00'}],
+    duration:'3 bulan · 36 sesi', price:0, seats:20, taken:14,
+    mentor:'Kak Sarah Amelia', role:'Lead Tutor · IELTS 8.0',
+    tagline:'Berani bicara, dimulai dari obrolan paling sederhana.',
+    desc:'Kelas perkenalan untuk kamu yang paham grammar tapi beku saat bicara. Setiap sesi adalah lingkaran percakapan kecil dengan topik yang berganti tiap pekan — dari small talk, wawancara kerja, sampai bercerita tentang film favorit.',
+    mods:['Lingkaran percakapan 6–8 orang setiap sesi','Pronunciation clinic: 10 suara yang paling sering salah','Peran & simulasi: kafe, bandara, wawancara kerja','Showcase presentasi 3 menit di akhir tiap bulan'] },
+  { id:'gram', name:'Grammar Mastery', cat:'language', catLabel:'Bahasa', level:'Menengah',
+    days:'Sel · Kam', time:'19.00–20.30', sched:[{d:2,t:'19:00'},{d:4,t:'19:00'}],
+    duration:'2 bulan · 16 sesi', price:75, seats:16, taken:16,
+    mentor:'Bang Rizky Hidayat', role:'Grammar Coach · M.Pd',
+    tagline:'Grammar yang rapi adalah fondasi percaya diri.',
+    desc:'Bedah tuntas 16 titik grammar yang paling sering bikin salah kaprah — tense, article, preposition, sampai sentence structure — lewat latihan intensif dan koreksi personal di setiap pertemuan.',
+    mods:['16 titik grammar paling kritis, terurut dari dasar','Latihan harian 15 menit lewat grup kelas','Koreksi personal pada setiap tugas','Ujian progres di pekan ke-4 dan ke-8'] },
+  { id:'toefl', name:'TOEFL ITP Intensive', cat:'test', catLabel:'Test Prep', level:'Menengah–Atas',
+    days:'Sabtu', time:'09.00–12.00', sched:[{d:6,t:'09:00'}],
+    duration:'8 pekan · 8 sesi', price:150, seats:24, taken:11,
+    mentor:'Pak Dimas Prasetyo', role:'TOEFL Specialist · Score 647',
+    tagline:'Strategi, drill, dan simulasi sampai target tercapai.',
+    desc:'Program intensif 8 pekan menuju skor TOEFL ITP 500+. Full drill structure, written expression, dan listening dengan pembahasan taktis — ditutup empat kali simulasi ujian resmi dengan analisis skor personal.',
+    mods:['4 simulasi ujian resmi dengan pembahasan lengkap','Bank soal: 800+ item terkurasi','Strategi timing per section','Analisis skor personal setiap simulasi'] },
+  { id:'debate', name:'Public Speaking & Debate', cat:'speaking', catLabel:'Speaking', level:'Mahir',
+    days:'Rabu', time:'19.00–20.30', sched:[{d:3,t:'19:00'}],
+    duration:'3 bulan · 12 sesi', price:100, seats:16, taken:9,
+    mentor:'Kak Nadia Rahma', role:'Head Coach · National Semifinalist',
+    tagline:'Bicara di depan umum tanpa getar, berdebat tanpa drama.',
+    desc:'Untuk kamu yang sudah nyaman bicara dan ingin naik kelas: public speaking persuasif, teknik debat parlementer, dan improvisasi. Sesi berisi praktik penuh — setiap peserta pasti bicara di tiap pertemuan.',
+    mods:['Speech craft: struktur, intonasi, body language','Debat parlementer 3 lawan 3 tiap pekan','Impromptu speech tanpa persiapan','Turnamen internal di pekan terakhir'] },
+  { id:'vocab', name:'Vocabulary Sprint: 500 Words', cat:'language', catLabel:'Bahasa', level:'Semua level',
+    days:'Mandiri', time:'Check-in Sab 13.00', sched:[{d:6,t:'13:00'}],
+    duration:'6 pekan · mandiri', price:0, seats:30, taken:27,
+    mentor:'Kak Fira Anindya', role:'Content & Curriculum Lead',
+    tagline:'500 kata esensial, enam pekan, sekali jalan.',
+    desc:'Program mandiri dengan sistem spaced repetition: 500 kata esensial hasil kurasi dari korpus akademik dan media, dikemas dalam 30 set harian. Check-in mingguan untuk menguji retensi jangka panjang.',
+    mods:['500 kata terkurasi dalam 30 set harian','Kartu hafalan dengan sistem spaced repetition','Contoh pemakaian dari artikel & podcast asli','Quiz retensi setiap Sabtu siang'] },
+  { id:'story', name:'Storytelling & Writing Club', cat:'writing', catLabel:'Writing', level:'Menengah',
+    days:'Jumat', time:'19.00–20.30', sched:[{d:5,t:'19:00'}],
+    duration:'3 bulan · 12 sesi', price:75, seats:12, taken:12,
+    mentor:'Kak Yusuf Ardiansyah', role:'Writing Mentor · Penulis 2 buku',
+    tagline:'Ceritamu layak dibaca — dan didengar.',
+    desc:'Menulis dan bercerita dalam Bahasa Inggris dengan pendekatan workshop: setiap peserta menulis satu cerita pendek per bulan, dibaca dan dikritik ramah oleh kelas, ditutup storytelling night di depan publik.',
+    mods:['Workshop naskah: kritik ramah antar peserta','Teknik narrative arc & deskriptif','Satu cerita pendek per bulan','Storytelling night — tampil di depan publik'] },
+  { id:'kids', name:'English for Kids (7–12 th)', cat:'kids', catLabel:'Anak', level:'Pemula',
+    days:'Sabtu', time:'10.00–11.30', sched:[{d:6,t:'10:00'}],
+    duration:'3 bulan · 12 sesi', price:120, seats:15, taken:8,
+    mentor:'Miss Keisha Alia', role:'Kids Program Lead · TEYL Certified',
+    tagline:'Bahasa Inggris pertama yang menyenangkan.',
+    desc:'Belajar lewat permainan, lagu, dan proyek seni — anak-anak memperoleh 300+ kosakata dasar tanpa merasa sedang belajar. Kelas kecil dengan dua pengajar di setiap sesi.',
+    mods:['Belajar lewat game, lagu, dan role-play','Proyek seni bertema bahasa tiap bulan','Laporan progres untuk orang tua tiap bulan','Panggung mini di sesi terakhir'] },
+];
+
+/* ---------- penyimpanan lokal ---------- */
+const store = {
+  get(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
+};
+let regs  = store.get('pec_regs_v1', []);
+let marks = store.get('pec_marks_v1', []);
+
+/* koneksi Google Sheet (opsional — diisi saat setup Apps Script) */
+const ENDPOINT = '';             // URL Web App Apps Script, berakhiran /exec
+const TOKEN    = 'pec-secret-2025';
+/* nomor WhatsApp admin — GANTI dengan nomor asli (awali 62, tanpa +) */
+const ADMIN_WA = '628xxxxxxxxxx';
+
+let filter = { q:'', cat:'all', saved:false };
+let currentProgram = null;
+let formStep = 1;
+let deferredPrompt = null;
+
+const seatsLeft = p => p.seats - p.taken - regs.filter(r => r.programId === p.id && r.type === 'reg').length;
+const priceLabel = p => p.price === 0 ? 'Gratis' : `Rp ${p.price}rb/bln`;
+const byId = id => PROGRAMS.find(p => p.id === id);
+
+/* ---------- toast ---------- */
+function toast(msg, type='ok'){
+  const el = document.createElement('div');
+  el.className = 'toast' + (type === 'warn' ? ' warn' : '');
+  el.innerHTML = `<i data-lucide="${type === 'warn' ? 'triangle-alert' : 'circle-check'}"></i><span>${msg}</span>`;
+  $('#toastWrap').appendChild(el); icons();
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 320) }, 3200);
+}
+
+/* ---------- marquee ---------- */
+(function(){
+  const items = ['PEC — Pantura English Course','Pendaftaran batch terbuka','7 program kursus','Kelas pemula gratis','Tatap muka di Batam','Intake tiap awal bulan'];
+  const half = items.map(t => `${t}<i>✦</i>`).join('');
+  $('#mqTrack').innerHTML = `<span>${half}</span><span>${half}</span>`;
+})();
+
+/* ---------- katalog program ---------- */
+function chipHTML(){
+  let html = CATS.map(c => {
+    const n = c.id === 'all' ? PROGRAMS.length : PROGRAMS.filter(p => p.cat === c.id).length;
+    const act = filter.cat === c.id && !filter.saved;
+    return `<button class="chip-f ${act?'active':''}" data-cat="${c.id}">${c.label} <em>${n}</em></button>`;
+  }).join('');
+  if (marks.length){
+    html += `<button class="chip-f ${filter.saved?'active':''}" data-cat="__saved"><i data-lucide="bookmark"></i>Tersimpan <em>${marks.length}</em></button>`;
+  }
+  return html;
+}
+
+function renderList(){
+  const q = filter.q.trim().toLowerCase();
+  const rows = PROGRAMS.filter(p => {
+    if (filter.saved && !marks.includes(p.id)) return false;
+    if (!filter.saved && filter.cat !== 'all' && p.cat !== filter.cat) return false;
+    if (q && ![p.name, p.catLabel, p.level, p.days, p.tagline].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  $('#chipRow').innerHTML = chipHTML();
+  $('#resultCount').textContent = `Menampilkan ${rows.length} dari ${PROGRAMS.length} program`;
+  $('#emptyState').hidden = rows.length > 0;
+
+  $('#programList').innerHTML = rows.map(p => {
+    const left = seatsLeft(p);
+    const saved = marks.includes(p.id);
+    const idx = String(PROGRAMS.indexOf(p) + 1).padStart(2, '0');
+    return `
+    <article class="prow" data-id="${p.id}" tabindex="0" role="button" aria-label="Detail ${p.name}">
+      <div class="prow-idx">${idx}</div>
+      <div class="prow-main">
+        <h3 class="prow-name">${p.name}${saved ? ' <i data-lucide="bookmark"></i>' : ''}</h3>
+        <div class="prow-tags"><span class="tag">${p.catLabel}</span><span class="tag">${p.level}</span></div>
+      </div>
+      <div class="prow-meta">
+        <div><i data-lucide="calendar"></i>${p.days}</div>
+        <div><i data-lucide="clock"></i>${p.time} · ${p.duration}</div>
+      </div>
+      <div class="prow-price ${p.price===0?'free':''}">${priceLabel(p)}</div>
+      <div class="prow-status">${left<=0 ? '<span class="chip full">Penuh</span>' : `<span class="chip"><span class="dot"></span>Sisa ${left}</span>`}</div>
+      <div class="prow-go"><i data-lucide="arrow-up-right"></i></div>
+      <button class="prow-save ${saved?'on':''}" data-save="${p.id}" aria-label="Simpan program"><i data-lucide="bookmark"></i></button>
+    </article>`;
+  }).join('');
+
+  const list = $('#programList');
+  list.classList.remove('swap'); void list.offsetWidth; list.classList.add('swap');
+  icons();
+}
+
+ $('#programList').addEventListener('click', e => {
+  const save = e.target.closest('[data-save]');
+  if (save){
+    const id = save.dataset.save;
+    marks = marks.includes(id) ? marks.filter(x => x !== id) : [...marks, id];
+    if (!marks.length) filter.saved = false;
+    store.set('pec_marks_v1', marks);
+    renderList(); renderRegs();
+    return;
+  }
+  const row = e.target.closest('.prow');
+  if (row) openDetail(row.dataset.id);
+});
+ $('#programList').addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('prow')){
+    e.preventDefault(); openDetail(e.target.dataset.id);
+  }
+});
+ $('#searchInput').addEventListener('input', e => { filter.q = e.target.value; renderList(); });
+ $('#chipRow').addEventListener('click', e => {
+  const c = e.target.closest('[data-cat]'); if (!c) return;
+  if (c.dataset.cat === '__saved'){ filter.saved = !filter.saved; }
+  else { filter.cat = c.dataset.cat; filter.saved = false; }
+  renderList();
+});
+ $('#btnReset').addEventListener('click', () => {
+  filter = { q:'', cat:'all', saved:false };
+  $('#searchInput').value = '';
+  renderList();
+});
+
+/* ---------- detail slide-over ---------- */
+function openDetail(id){
+  const p = byId(id); if (!p) return;
+  currentProgram = p;
+  const left = seatsLeft(p);
+  const registered = regs.some(r => r.programId === p.id);
+  const saved = marks.includes(p.id);
+
+  $('#detailBody').innerHTML = `
+    <div class="detail-top">
+      <div class="cat-line">
+        <span class="cat-ic"><i data-lucide="${CAT_ICON[p.cat]}"></i></span>
+        ${p.catLabel} · ${p.level}
+      </div>
+      <div style="display:flex;gap:9px">
+        <button class="icon-btn ${saved?'on':''}" id="dSave" aria-label="Simpan program"><i data-lucide="bookmark"></i></button>
+        <button class="icon-btn" id="dClose" aria-label="Tutup"><i data-lucide="x"></i></button>
+      </div>
+    </div>
+    <h2 class="d-name">${p.name}</h2>
+    <p class="d-tagline">“${p.tagline}”</p>
+    <p class="d-desc">${p.desc}</p>
+    <p class="d-sub">Apa yang kamu dapatkan</p>
+    <ul class="d-mods">${p.mods.map(m => `<li><i data-lucide="circle-check"></i>${m}</li>`).join('')}</ul>
+    <p class="d-sub">Informasi kelas</p>
+    <dl class="d-grid">
+      <div><dt>Jadwal</dt><dd>${p.days}</dd></div>
+      <div><dt>Waktu</dt><dd>${p.time}</dd></div>
+      <div><dt>Durasi</dt><dd>${p.duration}</dd></div>
+      <div><dt>Sisa kuota</dt><dd>${left<=0 ? 'Penuh — waitlist terbuka' : left+' kursi'}</dd></div>
+      <div><dt>Biaya</dt><dd>${priceLabel(p)}</dd></div>
+      <div><dt>Level</dt><dd>${p.level}</dd></div>
+    </dl>
+    <p class="d-sub">Mentor</p>
+    <div class="d-mentor">
+      <span class="d-ava">${p.mentor.split(' ').slice(-2).map(w=>w[0]).join('')}</span>
+      <div><b>${p.mentor}</b><span>${p.role}</span></div>
+    </div>`;
+  $('#detailFoot').innerHTML = `
+    <div class="d-price"><small>Biaya program</small><b class="${p.price===0?'free':''}">${priceLabel(p)}</b></div>
+    ${registered
+      ? `<button class="btn btn-ghost" disabled><i data-lucide="badge-check"></i> Sudah terdaftar</button>`
+      : left<=0
+        ? `<button class="btn btn-primary" id="dJoin"><i data-lucide="hourglass"></i> Masuk Waitlist</button>`
+        : `<button class="btn btn-accent" id="dJoin"><i data-lucide="arrow-right"></i> Daftar Program</button>`}`;
+
+  $('#detailPanel').classList.add('open');
+  $('#scrim').classList.add('show');
+  document.documentElement.style.overflow = 'hidden';
+  $('#detailPanel .detail-scroll').scrollTop = 0;
+  icons();
+
+  $('#dClose').onclick = closeDetail;
+  $('#dSave').onclick = () => {
+    marks = marks.includes(p.id) ? marks.filter(x => x !== p.id) : [...marks, p.id];
+    store.set('pec_marks_v1', marks);
+    $('#dSave').classList.toggle('on', marks.includes(p.id));
+    renderList();
+  };
+  const join = $('#dJoin');
+  if (join) join.onclick = () => { closeDetail(); setTimeout(() => openForm(p.id), 180); };
+}
+function closeDetail(){
+  $('#detailPanel').classList.remove('open');
+  $('#scrim').classList.remove('show');
+  document.documentElement.style.overflow = '';
+}
+ $('#scrim').addEventListener('click', closeDetail);
+
+/* ---------- formulir pendaftaran ---------- */
+function openForm(id){
+  const p = byId(id); if (!p) return;
+  currentProgram = p; formStep = 1;
+  const wl = seatsLeft(p) <= 0;
+  $('#formKicker').textContent = wl ? 'Formulir Waitlist' : 'Formulir Pendaftaran';
+  $('#formTitle').textContent = p.name;
+  ['fName','fPhone','fSchool','fReason'].forEach(k => { $('#'+k).value = ''; $('#'+k).closest('.field').classList.remove('invalid'); });
+  $('#reasonCount').textContent = '0';
+  $('#agree').checked = false;
+  $('#agreeErr').style.display = 'none';
+  $('#fSuccess').hidden = true;
+  $('#cardZone').hidden = true;
+  $('#fSuccess .success').style.display = '';
+  showStep(1);
+  $('#formOverlay').classList.add('show');
+  document.documentElement.style.overflow = 'hidden';
+  setTimeout(() => $('#fName').focus(), 350);
+}
+function closeForm(){
+  $('#formOverlay').classList.remove('show');
+  document.documentElement.style.overflow = '';
+}
+ $('#btnCloseForm').addEventListener('click', closeForm);
+ $('#formOverlay').addEventListener('click', e => { if (e.target.id === 'formOverlay') closeForm(); });
+
+function showStep(n){
+  formStep = n;
+  $('#fs1').hidden = n !== 1;
+  $('#fs2').hidden = n !== 2;
+  $('#fSuccess').hidden = n !== 3;
+  $('#formStepInd').textContent = n === 3 ? '✓' : `${n} / 2`;
+  const foot = $('#formFoot');
+  if (n === 1){
+    foot.innerHTML = `
+      <button class="btn btn-ghost" id="btnCancelForm">Batal</button>
+      <button class="btn btn-primary" id="btnNext">Lanjut <i data-lucide="arrow-right"></i></button>`;
+    $('#btnNext').onclick = validateStep1;
+    $('#btnCancelForm').onclick = closeForm;
+  } else if (n === 2){
+    foot.innerHTML = `
+      <button class="btn btn-ghost" id="btnBack">Kembali</button>
+      <button class="btn btn-accent" id="btnSend"><i data-lucide="check"></i> Kirim Pendaftaran</button>`;
+    $('#btnBack').onclick = () => showStep(1);
+    $('#btnSend').onclick = submitForm;
+  } else foot.innerHTML = '';
+  icons();
+}
+
+function validateStep1(){
+  const name = $('#fName').value.trim();
+  const digits = $('#fPhone').value.replace(/\D/g,'');
+  const okName = name.length >= 3 && /[a-zA-Z]/.test(name);
+  const okPhone = /^(62|0)8\d{7,11}$/.test(digits);
+  $('#fldName').classList.toggle('invalid', !okName);
+  $('#fldPhone').classList.toggle('invalid', !okPhone);
+  if (!okName) return $('#fName').focus();
+  if (!okPhone) return $('#fPhone').focus();
+  const p = currentProgram;
+  $('#sProg').textContent  = p.name;
+  $('#sSched').textContent = `${p.days} · ${p.time}`;
+  $('#sCost').textContent  = seatsLeft(p) <= 0 ? 'Waitlist (tanpa biaya dulu)' : priceLabel(p);
+  $('#sName').textContent  = name;
+  $('#sPhone').textContent = $('#fPhone').value.trim();
+  showStep(2);
+}
+ $('#fReason').addEventListener('input', e => $('#reasonCount').textContent = e.target.value.length);
+ $('#fPhone').addEventListener('input', e => $('#fldPhone').classList.remove('invalid'));
+ $('#fName').addEventListener('input',  e => $('#fldName').classList.remove('invalid'));
+
+function genRegId(){
+  const n = new Date();
+  const d = String(n.getFullYear()).slice(2) + String(n.getMonth()+1).padStart(2,'0') + String(n.getDate()).padStart(2,'0');
+  const abc = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let s = ''; for (let i=0;i<4;i++) s += abc[Math.floor(Math.random()*abc.length)];
+  return `PEC-${d}-${s}`;
+}
+
+/* kirim pendaftaran ke Google Sheet (fire-and-forget; kalau gagal, tetap tersimpan lokal) */
+function sendToServer(reg){
+  if (!ENDPOINT) return;
+  try{
+    fetch(ENDPOINT, {method:'POST', body: JSON.stringify({
+      token: TOKEN, id: reg.id, date: new Date(reg.date).toISOString(),
+      name: reg.name, phone: reg.phone, school: reg.school,
+      reason: reg.reason, program: (byId(reg.programId)||{}).name || reg.programId, type: reg.type
+    })}).catch(()=>{});
+  }catch(e){}
+}
+
+function submitForm(){
+  if (!$('#agree').checked){ $('#agreeErr').style.display = 'block'; return; }
+  const p = currentProgram;
+  const reg = {
+    id: genRegId(), programId: p.id,
+    name: $('#fName').value.trim(),
+    phone: $('#fPhone').value.trim(),
+    school: $('#fSchool').value.trim(),
+    reason: $('#fReason').value.trim(),
+    type: seatsLeft(p) <= 0 ? 'waitlist' : 'reg',
+    date: Date.now(),
+  };
+  regs.unshift(reg);
+  store.set('pec_regs_v1', regs);
+  sendToServer(reg);
+  renderList(); renderRegs();
+
+  $('#regIdVal').textContent = reg.id;
+  $('#mcName').textContent = reg.name;
+  $('#mcProg').textContent = p.name;
+  $('#mcSince').textContent = `Member since ${MON[new Date().getMonth()]} ${new Date().getFullYear()}`;
+  $('#bcId').textContent = reg.id;
+  drawBarcode(reg.id);
+  $('#memberCard').classList.remove('flipped');
+  $('#cardZone').hidden = true;
+  const ok = $('#okmark'); ok.innerHTML = ok.innerHTML;
+  showStep(3);
+  toast(reg.type === 'waitlist' ? 'Kamu masuk waitlist — pantau WhatsApp-mu!' : 'Pendaftaran berhasil disimpan');
+}
+
+ $('#regIdChip').addEventListener('click', () => {
+  const v = $('#regIdVal').textContent;
+  (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject())
+    .then(() => toast('Nomor pendaftaran disalin'))
+    .catch(() => toast(v, 'ok'));
+});
+ $('#btnShowCard').addEventListener('click', () => {
+  $('#cardZone').hidden = false;
+  $('#cardZone').scrollIntoView({behavior:'smooth', block:'center'});
+});
+ $('#btnFlipCard').addEventListener('click', () => $('#memberCard').classList.toggle('flipped'));
+ $('#btnDone').addEventListener('click', () => {
+  closeForm();
+  setTimeout(() => $('#pendaftaran').scrollIntoView({behavior:'smooth'}), 250);
+});
+
+/* barcode deterministik dari nomor pendaftaran */
+function drawBarcode(seed){
+  const cv = $('#bcCanvas'), ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = INK;
+  for (let i=0, x=4; x < cv.width-6; i++){
+    const c = seed.charCodeAt(i % seed.length);
+    const w = 1 + ((c * (i+3)) % 3);
+    ctx.fillRect(x, 6, w, cv.height-14);
+    x += w + 2 + (c % 2);
+  }
+}
+
+/* buka kartu member dari daftar "Pendaftaran Saya" */
+function openCard(regId){
+  const r = regs.find(x => x.id === regId);
+  if (!r) return;
+  const p = byId(r.programId);
+  const d = new Date(r.date);
+  $('#formKicker').textContent = 'Kartu Member';
+  $('#formTitle').textContent  = p ? p.name : 'PEC';
+  $('#formStepInd').textContent = '✓';
+  $('#fs1').hidden = true;
+  $('#fs2').hidden = true;
+  $('#fSuccess').hidden = false;
+  $('#fSuccess .success').style.display = 'none';
+  $('#regIdVal').textContent = r.id;
+  $('#mcName').textContent  = r.name;
+  $('#mcProg').textContent  = p ? p.name : '—';
+  $('#mcSince').textContent = `Member since ${MON[d.getMonth()]} ${d.getFullYear()}`;
+  $('#bcId').textContent = r.id;
+  drawBarcode(r.id);
+  $('#memberCard').classList.remove('flipped');
+  $('#cardZone').hidden = false;
+  $('#formFoot').innerHTML = '';
+  $('#formOverlay').classList.add('show');
+  document.documentElement.style.overflow = 'hidden';
+  icons();
+}
+
+/* ---------- pendaftaran saya ---------- */
+function renderRegs(){
+  const box = $('#regList');
+  const badge = $('#navRegBadge');
+  badge.hidden = regs.length === 0;
+  badge.textContent = regs.length;
+
+  if (!regs.length){
+    box.innerHTML = `
+      <div class="reg-empty">
+        <i data-lucide="user"></i>
+        <h3>Belum ada pendaftaran</h3>
+        <p>Pilih satu program, kunci kursimu, dan kartu member PEC-mu muncul di sini.</p>
+        <button class="btn btn-inv" onclick="document.getElementById('program').scrollIntoView({behavior:'smooth'})">Lihat program <i data-lucide="arrow-up-right"></i></button>
+      </div>`;
+    icons(); return;
+  }
+  box.innerHTML = regs.map(r => {
+    const p = byId(r.programId); if (!p) return '';
+    const d = new Date(r.date);
+    const tgl = `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}`;
+    return `
+    <div class="reg-item">
+      <div class="reg-main">
+        <div class="reg-name">${p.name}</div>
+        <div class="reg-sub">No. ${r.id} · ${tgl} · a.n. ${r.name}</div>
+      </div>
+      <div class="reg-side">
+        <span class="chip ${r.type==='waitlist'?'wl':''}">${r.type==='waitlist' ? 'Waitlist' : 'Menunggu verifikasi'}</span>
+        <button class="reg-card" data-card="${r.id}" aria-label="Lihat kartu member" title="Lihat kartu member"><i data-lucide="badge-check"></i></button>
+        <button class="reg-cancel" data-cancel="${r.id}" aria-label="Batalkan pendaftaran"><i data-lucide="trash-2"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+  icons();
+}
+
+ $('#regList').addEventListener('click', e => {
+  const card = e.target.closest('[data-card]');
+  if (card){ openCard(card.dataset.card); return; }
+  const btn = e.target.closest('[data-cancel]');
+  if (!btn) return;
+  if (!btn.classList.contains('armed')){
+    btn.classList.add('armed');
+    btn.innerHTML = 'Yakin?';
+    setTimeout(() => {
+      if (btn.isConnected){ btn.classList.remove('armed'); btn.innerHTML = '<i data-lucide="trash-2"></i>'; icons(); }
+    }, 2600);
+    return;
+  }
+  const id = btn.dataset.cancel;
+  regs = regs.filter(r => r.id !== id);
+  store.set('pec_regs_v1', regs);
+  renderList(); renderRegs();
+  toast('Pendaftaran dibatalkan — kursi dikembalikan', 'warn');
+});
+
+/* ---------- papan sesi live ---------- */
+function nextOccur(day, hm){
+  const [h,m] = hm.split(':').map(Number);
+  const n = new Date(), c = new Date(n);
+  c.setDate(n.getDate() + ((day - n.getDay() + 7) % 7));
+  c.setHours(h, m, 0, 0);
+  if (c <= n) c.setDate(c.getDate() + 7);
+  return c;
+}
+function pad(n){ return String(n).padStart(2,'0') }
+function tick(){
+  let best = null;
+  for (const p of PROGRAMS) for (const s of p.sched){
+    const at = nextOccur(s.d, s.t);
+    if (!best || at < best.at) best = { at, p };
+  }
+  if (best){
+    $('#nbName').textContent = best.p.name;
+    $('#nbWhen').textContent = `${DAY[best.at.getDay()]}, ${pad(best.at.getHours())}.${pad(best.at.getMinutes())} WIB`;
+    const ms = best.at - new Date();
+    const s  = Math.max(0, Math.floor(ms/1000));
+    const d  = Math.floor(s/86400), h = Math.floor(s%86400/3600), m = Math.floor(s%3600/60), ss = s%60;
+    $('#nbCount').textContent = (d ? d + ' hari ' : '') + pad(h) + ':' + pad(m) + ':' + pad(ss);
+  }
+  const now = new Date(), day = now.getDay(), hr = now.getHours();
+  const open = day >= 1 && day <= 6 && hr >= 8 && hr < 20;
+  $('#clubStatus').classList.toggle('closed', !open);
+  $('#clubStatusText').textContent = open
+    ? 'PEC buka sekarang · tutup 20.00'
+    : (day === 0 ? 'PEC tutup · buka Senin 08.00' : 'PEC tutup · buka besok 08.00');
+}
+tick(); setInterval(tick, 1000);
+
+/* ---------- statistik count-up ---------- */
+const io = new IntersectionObserver(es => es.forEach(en => {
+  if (!en.isIntersecting) return;
+  io.unobserve(en.target);
+  en.target.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count, suf = el.dataset.suffix || '';
+    const t0 = performance.now(), dur = 1300;
+    (function step(t){
+      const k = Math.min(1, (t - t0)/dur), e = 1 - Math.pow(1-k, 3);
+      el.textContent = Math.round(target * e) + suf;
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  });
+}), {threshold:.4});
+io.observe($('.stats'));
+
+/* reveal on scroll */
+const rio = new IntersectionObserver(es => es.forEach(en => {
+  if (en.isIntersecting){ en.target.classList.add('in'); rio.unobserve(en.target); }
+}), {threshold:.12});
+ $$('.reveal').forEach(el => rio.observe(el));
+
+/* ---------- scroll-spy bottom nav ---------- */
+const spy = new IntersectionObserver(es => es.forEach(en => {
+  if (!en.isIntersecting) return;
+  $$('.bottom-nav [data-target]').forEach(b =>
+    b.classList.toggle('active', b.dataset.target === en.target.id));
+}), {rootMargin:'-45% 0px -50% 0px'});
+['program','pendaftaran'].forEach(id => spy.observe(document.getElementById(id)));
+ $$('.bottom-nav [data-target]').forEach(b =>
+  b.addEventListener('click', () => document.getElementById(b.dataset.target).scrollIntoView({behavior:'smooth'})));
+
+/* ---------- PWA: manifest dinamis + ikon canvas ---------- */
+function makeIcon(size){
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const x = c.getContext('2d');
+  x.fillStyle = INK; x.fillRect(0,0,size,size);
+  let fs = Math.round(size * .36);
+  x.font = `700 ${fs}px Fraunces, Georgia, serif`;
+  x.textAlign = 'center'; x.textBaseline = 'middle';
+  let w = x.measureText('PEC').width;
+  if (w > size * .68){ fs = Math.floor(fs * (size * .68 / w)); x.font = `700 ${fs}px Fraunces, Georgia, serif`; w = x.measureText('PEC').width; }
+  x.fillStyle = '#F6F1E5';
+  x.fillText('PEC', size/2 - size*.02, size/2 + size*.01);
+  x.fillStyle = '#E4572E';
+  x.beginPath();
+  x.arc(size/2 + w/2 - fs*.08, size/2 + fs*.42, Math.max(2, size*.04), 0, 7);
+  x.fill();
+  return c.toDataURL('image/png');
+}
+(function initPWA(){
+  try{
+    if (!/^https?:/.test(location.protocol)) return;
+    const base = location.origin + location.pathname.replace(/[^/]*$/, '');
+    const m = {
+      name:'PEC — Pantura English Course', short_name:'PEC',
+      description:'Katalog program & pendaftaran kelas PEC — Pantura English Course.',
+      start_url: base, scope: base,
+      display:'standalone', background_color:'#F6F1E5', theme_color:'#0F3239',
+      icons:[
+        {src:makeIcon(192), sizes:'192x192', type:'image/png', purpose:'any maskable'},
+        {src:makeIcon(512), sizes:'512x512', type:'image/png', purpose:'any maskable'},
+      ]
+    };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(m)], {type:'application/manifest+json'}));
+    const l = document.createElement('link'); l.rel = 'manifest'; l.href = url;
+    document.head.appendChild(l);
+    const f = document.createElement('link'); f.rel = 'apple-touch-icon'; f.href = makeIcon(180);
+    document.head.appendChild(f);
+    const fav = document.createElement('link'); fav.rel = 'icon'; fav.href = makeIcon(64);
+    document.head.appendChild(fav);
+  }catch(e){}
+})();
+
+window.addEventListener('load', async () => {
+  if (!('serviceWorker' in navigator) || !/^https?:/.test(location.protocol)) return;
+  try{
+    const res = await fetch('sw.js', {cache:'no-store'});
+    if (res.ok && (await res.text()).includes('serviceWorker')){
+      await navigator.serviceWorker.register('sw.js');
+    }
+  }catch(e){}
+});
+
+const SW_SOURCE = `// sw.js — PEC Pantura English Course (letakkan di root situs, sejajar index.html)
+const CACHE = 'pec-v1';
+const ASSETS = ['./'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(
+    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
+      const cp = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, cp));
+      return res;
+    }).catch(() => caches.match('./')))
+  );
+});
+`;
+function downloadSW(){
+  const b = new Blob([SW_SOURCE], {type:'text/javascript'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = 'sw.js'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast('sw.js diunduh — letakkan di root repo GitHub-mu');
+}
+
+/* ---------- alur install ---------- */
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+function refreshInstallUI(){
+  const st = isStandalone();
+  $$('.js-install').forEach(b => b.hidden = st);
+  $('#appBadge').hidden = !st;
+  $$('.bottom-nav button').forEach(b => { if (b.classList.contains('js-install')) b.hidden = st; });
+}
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e; refreshInstallUI();
+});
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null; refreshInstallUI();
+  toast('PEC terpasang! Buka dari layar utama.');
+});
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('.js-install');
+  if (!btn || btn.hidden) return;
+  if (deferredPrompt){
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') toast('Terima kasih sudah memasang PEC!');
+    deferredPrompt = null; refreshInstallUI();
+  } else openInstallModal();
+});
+function platform(){
+  const u = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(u)) return 'ios';
+  if (/Android/.test(u)) return 'android';
+  return 'desktop';
+}
+function openInstallModal(){
+  const steps = {
+    ios:['Pastikan membuka halaman ini di <b>Safari</b>','Ketuk ikon <b>Bagikan</b> (kotak dengan panah ke atas)','Pilih <b>“Tambahkan ke Layar Utama”</b> → Tambah'],
+    android:['Buka menu <b>⋮</b> di pojok kanan atas Chrome','Pilih <b>“Tambahkan ke layar utama”</b> atau <b>“Install app”</b>','Konfirmasi — ikon PEC muncul di layarmu'],
+    desktop:['Cari ikon <b>install</b> di ujung kanan address bar','Klik ikon tersebut, lalu pilih <b>“Install”</b>','Aplikasi terbuka di jendela sendiri, tanpa address bar'],
+  }[platform()];
+  $('#installBody').innerHTML = `
+    <p>Pantura English Course bisa dipasang seperti aplikasi biasa — ikon di layar utama, layar penuh, dan siap dipakai kapan saja.</p>
+    <ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol>
+    <p class="modal-note">Catatan teknis: untuk pemasangan satu-klik, host berkas ini bersama <b>sw.js</b> di root repo GitHub <b>welcome-to-batam/PEC-Pantura-English-Course</b> lalu aktifkan GitHub Pages.</p>`;
+  $('#installFoot').innerHTML = `
+    <button class="btn btn-ghost" id="mDl"><i data-lucide="file-code-2"></i> Unduh sw.js</button>
+    <button class="btn btn-primary" data-close style="margin-left:auto">Mengerti</button>`;
+  $('#installModal').classList.add('show');
+  icons();
+  $('#mDl').addEventListener('click', downloadSW);
+}
+ $('#installModal').addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) $('#installModal').classList.remove('show');
+});
+
+/* ---------- online/offline ---------- */
+function netTick(){
+  $('#offlineBar').hidden = navigator.onLine;
+}
+window.addEventListener('online',  () => { netTick(); toast('Kembali online'); });
+window.addEventListener('offline', () => { netTick(); toast('Kamu offline — halaman tetap jalan', 'warn'); });
+netTick();
+
+/* ---------- escape ---------- */
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#detailPanel').classList.contains('open')) closeDetail();
+  else if ($('#installModal').classList.contains('show')) $('#installModal').classList.remove('show');
+  else if ($('#formOverlay').classList.contains('show')) closeForm();
+});
+
+/* ---------- init ---------- */
+ $('#btnWaAdmin').href = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Halo Admin PEC, saya mau bertanya soal pendaftaran program.')}`;
+renderList();
+renderRegs();
+refreshInstallUI();
+icons();
+</script>
+</body>
+</html>
